@@ -35,11 +35,6 @@ dependencies {
     // Replace modImplementation with modApi if you expose components in your own API
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}"
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
-    // Copy the following only if you want to bundle Cardinal Components API as a Jar-in-Jar dependency
-    // (otherwise, you should configure the dependency on Modrinth/Curseforge)
-    include "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}"
-    include "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
-	
 }
 
 processResources {

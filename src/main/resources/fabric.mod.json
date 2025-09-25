@@ -20,7 +20,10 @@
 		],
 		"fabric-datagen": [
 			"dev.joaq.ancestralpowers.AncestralPowersDataGenerator"
-		]
+		],
+      "cardinal-components": [
+        "dev.joaq.ancestralpowers.components.MyComponents"
+      ]
 	},
 	"mixins": [
 		"ancestralpowers.mixins.json"
@@ -33,5 +36,10 @@
 	},
 	"suggests": {
 		"another-mod": "*"
-	}
+	},
+  "custom": {
+    "cardinal-components": [
+      "ancestralpowers:random_int"
+    ]
+  }
 }
