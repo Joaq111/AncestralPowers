@@ -14,6 +14,8 @@ public class AncestralPowers implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+
         PlayerJoinHandler.register();
+
 	}
 }
