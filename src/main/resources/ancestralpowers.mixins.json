@@ -3,7 +3,7 @@
   "package": "dev.joaq.ancestralpowers.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-//    "ServerPlayerEntityMixin"
+
     ],
   "injectors": {
     "defaultRequire": 1

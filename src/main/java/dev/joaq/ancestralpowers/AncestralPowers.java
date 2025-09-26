@@ -2,6 +2,8 @@ package dev.joaq.ancestralpowers;
 
 import dev.joaq.ancestralpowers.client.ModKeyBinds;
 import dev.joaq.ancestralpowers.commands.ModCommands;
+import dev.joaq.ancestralpowers.components.MyComponents;
+import dev.joaq.ancestralpowers.components.PlayerTraits;
 import dev.joaq.ancestralpowers.events.PlayerJoinEvent;
 import dev.joaq.ancestralpowers.events.PlayerPowersTickHandler;
 import net.fabricmc.api.ClientModInitializer;
@@ -18,6 +20,8 @@ public class AncestralPowers implements ModInitializer, ClientModInitializer {
 
     @Override
     public void onInitialize() {
+
+
         System.out.println("ancestralpowers: AncestralPowers inicializado!");
         PlayerJoinEvent.register();
         PlayerPowersTickHandler.register();
@@ -25,24 +29,19 @@ public class AncestralPowers implements ModInitializer, ClientModInitializer {
         // registra a tecla
         ModKeyBinds.registerKeyBinds();
 
-        // registra o evento de tick para escutar teclas
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (ModKeyBinds.POWER_KEY.wasPressed()) {
                 if (client.player != null) {
-                    // Aqui é o que será executado quando a tecla for apertada
-                    client.player.sendMessage(Text.literal("Você usou seu poder!"), false);
-
-                    // depois você pode trocar isso por:
-                    // PowersManager.usePower(client.player)
+                    PlayerTraits traits = MyComponents.TRAITS.get(client.player);
+                    traits.setActivate(!traits.getActivate());
+                    client.player.sendMessage(Text.literal("Você usou seu poder!" + traits.getActivate()), false);
                 }
             }
             while (ModKeyBinds.POWER_KEY2.wasPressed()) {
                 if (client.player != null) {
-                    // Aqui é o que será executado quando a tecla for apertada
+
                     client.player.sendMessage(Text.literal("Você usou seu poder secundario!"), false);
 
-                    // depois você pode trocar isso por:
-                    // PowersManager.usePower(client.player)
                 }
             }
         });

@@ -1,6 +1,6 @@
 package dev.joaq.ancestralpowers.powers;
 
-import dev.joaq.ancestralpowers.AncestralPowers;
+import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -15,6 +15,15 @@ import java.util.UUID;
 public class PowersManager {
 
     private static final UUID SUPER_FORCA_UUID = UUID.fromString("5a9b4f8f-6b7d-4f1e-9bde-123456789abc");
+
+       public static void setActive(ServerPlayerEntity player, boolean active) {
+        if (player == null) return;
+
+        PlayerTraits traits = MyComponents.TRAITS.get(player);
+
+        traits.setActivate(active);
+
+    }
 
     public static void applyMovementPower(ServerPlayerEntity player, String power) {
         switch(power) {

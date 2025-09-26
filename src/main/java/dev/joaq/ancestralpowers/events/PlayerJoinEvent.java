@@ -14,10 +14,12 @@ public class PlayerJoinEvent {
             ServerPlayerEntity player = handler.player;
             PlayerTraits traits = MyComponents.TRAITS.get(player);
 
+
             if(traits.getMovementPower() == null) {
                 traits.setMovementPower(RandomUtils.randomMovement());
                 traits.setMainPower(RandomUtils.randomMain());
                 traits.setIntelligence(RandomUtils.randomIntelligence());
+                traits.setActivate(true);
             }
 //            PowersManager.applyAll(player, traits);
 

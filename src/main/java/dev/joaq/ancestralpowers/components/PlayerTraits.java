@@ -6,6 +6,9 @@ import net.minecraft.storage.WriteView;
 import org.ladysnake.cca.api.v3.component.Component;
 
 public interface PlayerTraits extends Component {
+    Boolean getActivate();
+    void setActivate(Boolean activate);
+
     String getMovementPower();
     void setMovementPower(String power);
 
@@ -17,9 +20,20 @@ public interface PlayerTraits extends Component {
 }
 
     class PlayerTraitsComponent implements PlayerTraits {
+        private boolean activate;
         private String movement;
         private String main;
         private String intelligence;
+
+        @Override
+        public Boolean getActivate() {
+            return activate;
+        }
+
+        @Override
+        public void setActivate(Boolean activate) {
+            this.activate = activate;
+        }
 
         @Override
         public String getMovementPower() {
@@ -57,6 +71,7 @@ public interface PlayerTraits extends Component {
             writeView.putString("movement",movement);
             writeView.putString("main",main);
             writeView.putString("intelligence",intelligence);
+            writeView.putBoolean("activate",activate);
 
         }
 
@@ -65,6 +80,7 @@ public interface PlayerTraits extends Component {
             this.movement = readView.getString("movement", movement);
             this.main = readView.getString("main", main);
             this.intelligence = readView.getString("intelligence", intelligence);
+            this.activate = readView.getBoolean("activate", activate);
         }
     }
 
