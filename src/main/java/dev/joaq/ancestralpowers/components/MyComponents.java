@@ -10,14 +10,14 @@ import org.ladysnake.cca.api.v3.entity.RespawnCopyStrategy;
 
 public class MyComponents implements EntityComponentInitializer {
 
-    public static final ComponentKey<IntComponent> RANDOM_INT =
+    public static final ComponentKey<PlayerTraits> TRAITS =
             ComponentRegistryV3.INSTANCE.getOrCreate(
-                    Identifier.of(AncestralPowers.MOD_ID, "random_int"), IntComponent.class);
+                    Identifier.of(AncestralPowers.MOD_ID, "player_traits"), PlayerTraits.class);
 
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-        registry.registerForPlayers(RANDOM_INT, player -> new RandomIntComponent() {
+        registry.registerForPlayers(TRAITS, player -> new PlayerTraitsComponent() {
 
         }, RespawnCopyStrategy.ALWAYS_COPY);
     }
