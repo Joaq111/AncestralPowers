@@ -14,6 +14,7 @@ public class ModKeyBinds {
 
 
     public static void registerKeyBinds() {
+
         POWER_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.ancestralpowers.use_power", // tradução no lang
                 InputUtil.Type.KEYSYM,

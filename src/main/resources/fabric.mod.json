@@ -17,6 +17,9 @@
 		"main": [
 			"dev.joaq.ancestralpowers.AncestralPowers"
 		],
+      "client": [
+        "dev.joaq.ancestralpowers.AncestralPowersClient"
+      ],
 		"fabric-datagen": [
 			"dev.joaq.ancestralpowers.AncestralPowersDataGenerator"
 		],

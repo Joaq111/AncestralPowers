@@ -19,7 +19,7 @@ public class PlayerJoinEvent {
                 traits.setMovementPower(RandomUtils.randomMovement());
                 traits.setMainPower(RandomUtils.randomMain());
                 traits.setIntelligence(RandomUtils.randomIntelligence());
-                traits.setActivate(true);
+                traits.setActivate(false);
             }
 //            PowersManager.applyAll(player, traits);
 
