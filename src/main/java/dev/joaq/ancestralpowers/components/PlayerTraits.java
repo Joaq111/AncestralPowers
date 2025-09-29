@@ -6,8 +6,13 @@ import net.minecraft.storage.WriteView;
 import org.ladysnake.cca.api.v3.component.Component;
 
 public interface PlayerTraits extends Component {
-    Boolean getActivate();
-    void setActivate(Boolean activate);
+    Float getStamina();
+    void setStamina(Float stamina);
+    Boolean getActPower_main();
+    void setActPower_main(Boolean actPower_main);
+
+    Boolean getActPower_secondary();
+    void setActPower_secondary(Boolean actPower_secondary);
 
     String getMovementPower();
     void setMovementPower(String power);
@@ -20,19 +25,46 @@ public interface PlayerTraits extends Component {
 }
 
     class PlayerTraitsComponent implements PlayerTraits {
-        private boolean activate;
+        private boolean actPower_main;
+        private boolean actPower_secondary;
+
+        private Float stamina;
+
         private String movement;
         private String main;
         private String intelligence;
 
         @Override
-        public Boolean getActivate() {
-            return activate;
+        public Float getStamina() {
+            return stamina;
         }
 
         @Override
-        public void setActivate(Boolean activate) {
-            this.activate = activate;
+        public void setStamina(Float stamina) {
+            this.stamina = stamina;
+        }
+
+        @Override
+        public Boolean getActPower_main() {
+            return actPower_main;
+
+        }
+
+        @Override
+        public void setActPower_main(Boolean actPower_main) {
+            this.actPower_main = actPower_main;
+
+        }
+
+        @Override
+        public Boolean getActPower_secondary() {
+            return actPower_secondary;
+        }
+
+        @Override
+        public void setActPower_secondary(Boolean actPower_secondary) {
+            this.actPower_secondary = actPower_secondary;
+
         }
 
         @Override
@@ -71,7 +103,11 @@ public interface PlayerTraits extends Component {
             writeView.putString("movement",movement);
             writeView.putString("main",main);
             writeView.putString("intelligence",intelligence);
-            writeView.putBoolean("activate",activate);
+
+            writeView.putBoolean("actPower_main",actPower_main);
+            writeView.putBoolean("actPower_secondary",actPower_secondary);
+
+            writeView.putFloat("stamina",stamina);
 
         }
 
@@ -80,8 +116,15 @@ public interface PlayerTraits extends Component {
             this.movement = readView.getString("movement", movement);
             this.main = readView.getString("main", main);
             this.intelligence = readView.getString("intelligence", intelligence);
-            this.activate = readView.getBoolean("activate", activate);
+            this.actPower_main = readView.getBoolean("actPower_main", actPower_main);
+            this.actPower_secondary = readView.getBoolean("actPower_secondary", actPower_secondary);
+            if (readView.contains("stamina")) {
+                this.stamina = readView.getFloat("stamina", 100f); // garante valor default se ausente
+            } else if (this.stamina == null) {
+                this.stamina = 100f; // valor padrão caso ainda seja null
+            }
         }
-    }
+
+        }
 
 

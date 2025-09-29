@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 public class ModPacketsC2S {
 
@@ -21,11 +22,19 @@ public class ModPacketsC2S {
 
         context.server().execute(() -> {
             PlayerTraits traits = MyComponents.TRAITS.get(player);
+            for (Identifier powerId : payload.powerIds()) {
+                if (powerId.equals(Identifier.of("ancestralpowers", "main_power"))) {
+                    traits.setActPower_main(!traits.getActPower_main());
+                    player.sendMessage(Text.literal("Poder 1 =  " + traits.getActPower_main()), false);
+                }
+            }
+            for (Identifier powerId : payload.powerIds()) {
+                if (powerId.equals(Identifier.of("ancestralpowers", "secondary_power"))) {
+                    traits.setActPower_secondary(!traits.getActPower_secondary());
+                    player.sendMessage(Text.literal("Poder 2 =  " + traits.getActPower_secondary()), false);
+                }
+            }
 
-            // aqui tu alterna o boolean
-            traits.setActivate(!traits.getActivate());
-
-            player.sendMessage(Text.literal("Ativado? " + traits.getActivate()), false);
         });
     }
 }

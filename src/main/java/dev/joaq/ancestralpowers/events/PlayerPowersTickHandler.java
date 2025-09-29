@@ -15,11 +15,12 @@ public class PlayerPowersTickHandler {
 
                 for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                     PlayerTraits traits = MyComponents.TRAITS.get(player);
-                    if(traits.getActivate() == true) {
-                        PowersManager.applyAll(player, traits);
-                    }else {
-                        PowersManager.resetAll(player);
-                    }
+
+                    PowersManager.applyMainPower(player, traits.getMainPower(), traits.getActPower_main(), traits.getStamina());
+                    PowersManager.applyMovementPower(player, traits.getMovementPower(), traits.getActPower_secondary(), traits.getStamina());
+
+                    Float current = traits.getStamina();
+                    traits.setStamina(Math.min(current + 0.25f, 100f));
                 }
 
         });

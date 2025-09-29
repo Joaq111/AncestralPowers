@@ -2,83 +2,43 @@ package dev.joaq.ancestralpowers.powers;
 
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import dev.joaq.ancestralpowers.powers.main.*;
+import dev.joaq.ancestralpowers.powers.secondary.SuperTeleporteSecondaryPower;
+import dev.joaq.ancestralpowers.powers.secondary.VelocidadePower;
+import dev.joaq.ancestralpowers.powers.secondary.VooPower;
+import dev.joaq.ancestralpowers.powers.teleport.SuperTeleportePower;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-
-import java.util.UUID;
 
 public class PowersManager {
 
-    private static final UUID SUPER_FORCA_UUID = UUID.fromString("5a9b4f8f-6b7d-4f1e-9bde-123456789abc");
 
-       public static void setActive(ServerPlayerEntity player, boolean active) {
-        if (player == null) return;
-
-        PlayerTraits traits = MyComponents.TRAITS.get(player);
-
-        traits.setActivate(active);
-
+    private static Power getPower(String power) {
+        return switch (power) {
+            case "Super Força" -> new SuperForcaPower();
+            case "SuperTeleporte" -> new SuperTeleportePower();
+            case "Fireball" -> new FireballPower();
+            default -> null;
+        };
+    }
+    private static Power getPowerSecondary(String power) {
+        return switch (power) {
+            case "SuperTeleporte" -> new SuperTeleporteSecondaryPower();
+            case "Voo" -> new VooPower();
+            case "Velocidade" -> new VelocidadePower();
+            default -> null;
+        };
     }
 
-    public static void applyMovementPower(ServerPlayerEntity player, String power) {
-        switch(power) {
-            case "Voo":
-                player.getAbilities().allowFlying = true;
-                player.sendAbilitiesUpdate();
-                break;
-            case "Teleporte":
-                // aqui você pode dar um item de teleport ou um comando
-                break;
-            case "Velocidade":
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 1, 1, false, false));
-                break;
-        }
-
-
-    }
-
-    public static void applyMainPower(ServerPlayerEntity player, String power) {
-        EntityAttributeInstance attackAttr = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
-        if (attackAttr == null) return;
-
-        // Identificador do modifier
-        Identifier superForcaId = Identifier.of("ancestralpowers", "super_forca");
-
-        // Remove modifier antigo se existir
-        EntityAttributeModifier existing = attackAttr.getModifier(superForcaId);
-        if (existing != null) {
-            attackAttr.removeModifier(existing);
-        }
-
-        switch (power) {
-            case "Super Força":
-                // Só adiciona se ainda não existir
-                if (attackAttr.getModifier(superForcaId) == null) {
-                    attackAttr.addPersistentModifier(new EntityAttributeModifier(
-                            superForcaId, 100.0, EntityAttributeModifier.Operation.ADD_VALUE
-                    ));
-                }
-                break;
-
-            case "Imortalidade":
-                // Aqui você pode adicionar lógica de imortalidade
-                break;
-
-            case "Fireball":
-                // Aqui você pode adicionar lógica de fireball
-                break;
-
-            default:
-                break;
-        }
+    public static void applyMainPower(ServerPlayerEntity player, String power, boolean activate, float stamina) {
+        Power p = getPower(power);
+        if (p != null) p.apply(player, activate, stamina);
     }
 
 
+    public static void applyMovementPower(ServerPlayerEntity player, String power, boolean activate, float stamina) {
+        Power p = getPowerSecondary(power);
+        if (p != null) p.apply(player, activate, stamina);
+    }
 
     public static void applyIntelligence(ServerPlayerEntity player, String power) {
         switch(power) {
@@ -94,31 +54,24 @@ public class PowersManager {
         }
     }
 
-    public static void applyAll(ServerPlayerEntity player, PlayerTraits traits) {
-        applyMovementPower(player, traits.getMovementPower());
-        applyMainPower(player, traits.getMainPower());
-        applyIntelligence(player, traits.getIntelligence());
-    }
+
     public static void resetAll(ServerPlayerEntity player) {
-        // --- Reset movimento ---
-        player.getAbilities().allowFlying = false; // remove voo
-        player.sendAbilitiesUpdate();
+        PlayerTraits traits = MyComponents.TRAITS.get(player);
+        traits.setActPower_main(false);
+        traits.setActPower_secondary(false);
 
-        player.removeStatusEffect(StatusEffects.SPEED); // remove velocidade
-
-        // --- Reset ataque (remover super força) ---
-        EntityAttributeInstance attackAttr = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
-        if (attackAttr != null) {
-            Identifier superForcaId = Identifier.of("ancestralpowers", "super_forca");
-            EntityAttributeModifier existing = attackAttr.getModifier(superForcaId);
-            if (existing != null) {
-                attackAttr.removeModifier(existing);
-            }
+        Power[] powers = {
+                new SuperForcaPower(),
+                new SuperTeleportePower(),
+                new FireballPower(),
+                new VooPower(),
+                new VelocidadePower()
+        };
+        for (Power p : powers) {
+            if (p != null) p.reset(player);
         }
 
-        // --- Reset inteligência ---
-        // Aqui você pode remover efeitos/buffs relacionados a XP ou loot bonus se quiser.
-
-        // Agora reaplica os poderes atuais do jogador com base nos trait
     }
+
+
 }

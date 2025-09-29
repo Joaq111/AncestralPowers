@@ -50,16 +50,12 @@ public class ModCommands {
                                 }
 
                                 PowersManager.resetAll(player);
-                                // Pega traits do jogador
+
                                 PlayerTraits traits = MyComponents.TRAITS.get(player);
 
-                                // Rerola poderes aleatórios
-                                traits.setMovementPower(RandomUtils.randomMovement());
                                 traits.setMainPower(RandomUtils.randomMain());
+                                traits.setMovementPower(RandomUtils.randomMovement(traits.getMainPower()));
                                 traits.setIntelligence(RandomUtils.randomIntelligence());
-
-                                // Aplica poderes imediatamente
-                                PowersManager.applyAll(player, traits);
 
                                 // Informa o jogador
                                 player.sendMessage(Text.literal(

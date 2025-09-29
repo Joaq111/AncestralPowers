@@ -2,10 +2,13 @@ package dev.joaq.ancestralpowers.events;
 
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
+import dev.joaq.ancestralpowers.powers.teleport.TeleportParticles;
+import dev.joaq.ancestralpowers.powers.teleport.TeleportRaycast;
 import dev.joaq.ancestralpowers.util.RandomUtils;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 
 public class PlayerJoinEvent {
 
@@ -15,17 +18,29 @@ public class PlayerJoinEvent {
             PlayerTraits traits = MyComponents.TRAITS.get(player);
 
 
-            if(traits.getMovementPower() == null) {
-                traits.setMovementPower(RandomUtils.randomMovement());
+            if(traits.getMainPower() == null) {
                 traits.setMainPower(RandomUtils.randomMain());
-                traits.setIntelligence(RandomUtils.randomIntelligence());
-                traits.setActivate(false);
             }
-//            PowersManager.applyAll(player, traits);
+            if(traits.getMovementPower() == null) {
+                traits.setMovementPower(RandomUtils.randomMovement(traits.getMainPower()));
+            }
+
+            if(traits.getIntelligence() == null) {
+                traits.setIntelligence(RandomUtils.randomIntelligence());
+            }
+            if(traits.getStamina() == null) {
+                traits.setStamina(100f);
+            }
+            if(traits.getActPower_main() == null) {
+                traits.setActPower_main(false);
+            }
+            if(traits.getActPower_secondary() == null) {
+                traits.setActPower_secondary(false);
+            }
 
             player.sendMessage(Text.literal(
                     "Seus poderes: " + traits.getMovementPower() + " | " +
-                            traits.getMainPower() + " | " + traits.getIntelligence()
+                            traits.getMainPower() + " | " + traits.getIntelligence() + "|" + traits.getStamina()
             ), false);
         });
 

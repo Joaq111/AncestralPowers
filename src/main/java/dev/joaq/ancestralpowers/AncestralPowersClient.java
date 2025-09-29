@@ -35,6 +35,13 @@ public class AncestralPowersClient implements ClientModInitializer {
                     ));
                 }
             }
+            while (ModKeyBinds.POWER_KEY2.wasPressed()) {
+                if (client.player != null) {
+                    ClientPlayNetworking.send(new UseActivePowerTypesC2SPacket(
+                            List.of(Identifier.of("ancestralpowers", "secondary_power"))
+                    ));
+                }
+            }
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(client -> {

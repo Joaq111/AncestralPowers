@@ -1,19 +1,12 @@
 package dev.joaq.ancestralpowers;
 
-import dev.joaq.ancestralpowers.client.ModKeyBinds;
 import dev.joaq.ancestralpowers.commands.ModCommands;
-import dev.joaq.ancestralpowers.components.MyComponents;
-import dev.joaq.ancestralpowers.components.PlayerTraits;
 import dev.joaq.ancestralpowers.events.PlayerJoinEvent;
 import dev.joaq.ancestralpowers.events.PlayerPowersTickHandler;
 import dev.joaq.ancestralpowers.networking.ModPacketsC2S;
-import dev.joaq.ancestralpowers.powers.PowersManager;
+import dev.joaq.ancestralpowers.registry.ModEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +26,7 @@ public class AncestralPowers implements ModInitializer, ClientModInitializer {
         PlayerPowersTickHandler.register();
         ModCommands.register();
         ModPacketsC2S.register();
+        ModEntities.register();
 
     }
 
