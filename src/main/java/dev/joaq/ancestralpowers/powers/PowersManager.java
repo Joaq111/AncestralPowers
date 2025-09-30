@@ -3,10 +3,7 @@ package dev.joaq.ancestralpowers.powers;
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
 import dev.joaq.ancestralpowers.powers.main.*;
-import dev.joaq.ancestralpowers.powers.secondary.SuperTeleporteSecondaryPower;
-import dev.joaq.ancestralpowers.powers.secondary.VelocidadePower;
-import dev.joaq.ancestralpowers.powers.secondary.VooPower;
-import dev.joaq.ancestralpowers.powers.teleport.SuperTeleportePower;
+import dev.joaq.ancestralpowers.powers.secondary.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class PowersManager {
@@ -15,16 +12,21 @@ public class PowersManager {
     private static Power getPower(String power) {
         return switch (power) {
             case "Super Força" -> new SuperForcaPower();
-            case "SuperTeleporte" -> new SuperTeleportePower();
+            case "SuperTeleporte" -> new SuperTeleporteMainPower();
+            case "Scale" -> new IncreaseScalePower();
             case "Fireball" -> new FireballPower();
+            case "Imortalidade" -> new ImortalPower();
             default -> null;
         };
     }
     private static Power getPowerSecondary(String power) {
         return switch (power) {
             case "SuperTeleporte" -> new SuperTeleporteSecondaryPower();
+            case "Scale" -> new DecreaseScalePower();
             case "Voo" -> new VooPower();
             case "Velocidade" -> new VelocidadePower();
+            case "Teleporte" -> new TelepotePower();
+
             default -> null;
         };
     }
@@ -62,10 +64,15 @@ public class PowersManager {
 
         Power[] powers = {
                 new SuperForcaPower(),
-                new SuperTeleportePower(),
+                new SuperTeleporteMainPower(),
+                new SuperTeleporteSecondaryPower(),
                 new FireballPower(),
                 new VooPower(),
-                new VelocidadePower()
+                new VelocidadePower(),
+                new IncreaseScalePower(),
+                new DecreaseScalePower(),
+                new TelepotePower()
+
         };
         for (Power p : powers) {
             if (p != null) p.reset(player);

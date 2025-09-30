@@ -3,11 +3,21 @@ package dev.joaq.ancestralpowers.components;
 
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
+import net.minecraft.util.math.Vec3d;
 import org.ladysnake.cca.api.v3.component.Component;
 
 public interface PlayerTraits extends Component {
+
+    Double getScaleMultiplier();
+    void setScaleMultiplier(Double scaleMultiplier);
+
+    Vec3d getTeleportTarget();
+    void clearTeleportTarget();
+    void setTeleportTarget(Vec3d pos);
+
     Float getStamina();
     void setStamina(Float stamina);
+
     Boolean getActPower_main();
     void setActPower_main(Boolean actPower_main);
 
@@ -25,6 +35,11 @@ public interface PlayerTraits extends Component {
 }
 
     class PlayerTraitsComponent implements PlayerTraits {
+
+        private double scaleMultiplier = 1;
+
+        private Vec3d teleportTarget;
+
         private boolean actPower_main;
         private boolean actPower_secondary;
 
@@ -33,6 +48,31 @@ public interface PlayerTraits extends Component {
         private String movement;
         private String main;
         private String intelligence;
+
+
+        @Override
+        public Double getScaleMultiplier() {
+            return this.scaleMultiplier;
+        }
+
+        @Override
+        public void setScaleMultiplier(Double scaleMultiplier) {
+            this.scaleMultiplier = scaleMultiplier;
+        }
+
+        @Override
+        public Vec3d getTeleportTarget() {
+            return this.teleportTarget;
+        }
+
+        @Override
+        public void setTeleportTarget(Vec3d pos) {
+            this.teleportTarget = pos;
+        }
+
+        public void clearTeleportTarget() {
+            this.teleportTarget = null;
+        }
 
         @Override
         public Float getStamina() {

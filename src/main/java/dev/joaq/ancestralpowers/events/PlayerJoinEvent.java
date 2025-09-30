@@ -2,13 +2,10 @@ package dev.joaq.ancestralpowers.events;
 
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
-import dev.joaq.ancestralpowers.powers.teleport.TeleportParticles;
-import dev.joaq.ancestralpowers.powers.teleport.TeleportRaycast;
 import dev.joaq.ancestralpowers.util.RandomUtils;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
 
 public class PlayerJoinEvent {
 
