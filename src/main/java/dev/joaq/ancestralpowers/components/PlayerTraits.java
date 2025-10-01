@@ -8,6 +8,18 @@ import org.ladysnake.cca.api.v3.component.Component;
 
 public interface PlayerTraits extends Component {
 
+    int getMainPowerExperience();
+    void setMainPowerExperience(int mainPowerExperience);
+
+    int getSecondaryPowerExperience();
+    void setSecondaryPowerExperience(int secondaryPowerExperience);
+
+    int getMainPowerLevel();
+    void setMainPowerLevel(int mainPowerLevel);
+
+    int getSecondaryPowerLevel();
+    void setSecondaryPowerLevel(int secondaryPowerLevel);
+
     Double getScaleMultiplier();
     void setScaleMultiplier(Double scaleMultiplier);
 
