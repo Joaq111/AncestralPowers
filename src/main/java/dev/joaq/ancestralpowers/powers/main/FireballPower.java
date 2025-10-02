@@ -4,7 +4,9 @@ import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
 import dev.joaq.ancestralpowers.entiy.CustomFireballEntity;
 import dev.joaq.ancestralpowers.powers.Power;
+import dev.joaq.ancestralpowers.registry.ModEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
 public class FireballPower implements Power {
@@ -12,7 +14,11 @@ public class FireballPower implements Power {
     public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
         PlayerTraits traits = MyComponents.TRAITS.get(player);
 
-
+        if (player.hasStatusEffect(ModEffects.POWER_SUPPRESSION)) {
+            player.sendMessage(Text.literal("§cSeus poderes foram suprimidos!"), true);
+            traits.setActPower_main(false);
+            return;
+        }
         if (!activate || traits.getStamina() < 25) {
             traits.setActPower_main(false);
             return;

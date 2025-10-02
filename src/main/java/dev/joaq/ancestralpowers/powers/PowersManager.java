@@ -13,6 +13,7 @@ public class PowersManager {
         return switch (power) {
             case "Super Força" -> new SuperForcaPower();
             case "SuperTeleporte" -> new SuperTeleporteMainPower();
+            case "SuperSpeed" -> new SuperSpeedPower();
             case "Scale" -> new IncreaseScalePower();
             case "Fireball" -> new FireballPower();
             case "Imortalidade" -> new ImortalPower();
@@ -23,6 +24,7 @@ public class PowersManager {
         return switch (power) {
             case "SuperTeleporte" -> new SuperTeleporteSecondaryPower();
             case "Scale" -> new DecreaseScalePower();
+            case "SuperSpeed" -> new SuperSpeedPowerDecrease();
             case "Voo" -> new VooPower();
             case "Velocidade" -> new VelocidadePower();
             case "Teleporte" -> new TelepotePower();
@@ -64,6 +66,8 @@ public class PowersManager {
 
         Power[] powers = {
                 new SuperForcaPower(),
+                new SuperSpeedPower(),
+                new SuperSpeedPowerDecrease(),
                 new SuperTeleporteMainPower(),
                 new SuperTeleporteSecondaryPower(),
                 new FireballPower(),

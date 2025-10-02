@@ -63,6 +63,46 @@ public interface PlayerTraits extends Component {
 
 
         @Override
+        public int getMainPowerExperience() {
+            return 0;
+        }
+
+        @Override
+        public void setMainPowerExperience(int mainPowerExperience) {
+
+        }
+
+        @Override
+        public int getSecondaryPowerExperience() {
+            return 0;
+        }
+
+        @Override
+        public void setSecondaryPowerExperience(int secondaryPowerExperience) {
+
+        }
+
+        @Override
+        public int getMainPowerLevel() {
+            return 0;
+        }
+
+        @Override
+        public void setMainPowerLevel(int mainPowerLevel) {
+
+        }
+
+        @Override
+        public int getSecondaryPowerLevel() {
+            return 0;
+        }
+
+        @Override
+        public void setSecondaryPowerLevel(int secondaryPowerLevel) {
+
+        }
+
+        @Override
         public Double getScaleMultiplier() {
             return this.scaleMultiplier;
         }
@@ -171,9 +211,9 @@ public interface PlayerTraits extends Component {
             this.actPower_main = readView.getBoolean("actPower_main", actPower_main);
             this.actPower_secondary = readView.getBoolean("actPower_secondary", actPower_secondary);
             if (readView.contains("stamina")) {
-                this.stamina = readView.getFloat("stamina", 100f); // garante valor default se ausente
+                this.stamina = readView.getFloat("stamina", 100f);
             } else if (this.stamina == null) {
-                this.stamina = 100f; // valor padrão caso ainda seja null
+                this.stamina = 100f;
             }
         }
 

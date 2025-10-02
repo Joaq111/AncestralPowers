@@ -2,7 +2,6 @@ package dev.joaq.ancestralpowers.commands;
 
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
-import dev.joaq.ancestralpowers.events.PlayerPowersTickHandler;
 import dev.joaq.ancestralpowers.util.RandomUtils;
 import dev.joaq.ancestralpowers.powers.PowersManager;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;

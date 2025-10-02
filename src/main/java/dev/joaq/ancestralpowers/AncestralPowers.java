@@ -4,6 +4,7 @@ import dev.joaq.ancestralpowers.commands.ModCommands;
 import dev.joaq.ancestralpowers.events.PlayerJoinEvent;
 import dev.joaq.ancestralpowers.events.PlayerPowersTickHandler;
 import dev.joaq.ancestralpowers.networking.ModPacketsC2S;
+import dev.joaq.ancestralpowers.registry.ModEffects;
 import dev.joaq.ancestralpowers.registry.ModEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
@@ -27,7 +28,7 @@ public class AncestralPowers implements ModInitializer, ClientModInitializer {
         ModCommands.register();
         ModPacketsC2S.register();
         ModEntities.register();
-
+        ModEffects.register();
     }
 
     @Override
