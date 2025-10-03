@@ -3,26 +3,14 @@ package dev.joaq.ancestralpowers.powers.main;
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
 import dev.joaq.ancestralpowers.entiy.CustomFireballEntity;
-import dev.joaq.ancestralpowers.powers.Power;
-import dev.joaq.ancestralpowers.registry.ModEffects;
+import dev.joaq.ancestralpowers.powers.PowerBase;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
-public class FireballPower implements Power {
-    @Override
-    public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
-        PlayerTraits traits = MyComponents.TRAITS.get(player);
+public class FireballPower extends PowerBase {
 
-        if (player.hasStatusEffect(ModEffects.POWER_SUPPRESSION)) {
-            player.sendMessage(Text.literal("§cSeus poderes foram suprimidos!"), true);
-            traits.setActPower_main(false);
-            return;
-        }
-        if (!activate || traits.getStamina() < 25) {
-            traits.setActPower_main(false);
-            return;
-        }
+    @Override
+    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
 
         Vec3d look = player.getRotationVector();
         double startX = player.getX() + look.x;
@@ -38,12 +26,22 @@ public class FireballPower implements Power {
         fireball.updatePosition(startX, startY, startZ);
         player.getWorld().spawnEntity(fireball);
 
-        traits.setActPower_main(false);
-        traits.setStamina(traits.getStamina() - 25);
     }
 
     @Override
-    public void reset(ServerPlayerEntity player) {
+    protected float staminaCost() {
+        return 25;
+    }
 
+
+    @Override
+    public String ActivationType() {
+        return "PRESS";
+    }
+
+    @Override
+    public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
+        PlayerTraits traits = MyComponents.TRAITS.get(player);
+        execute(player, activate, ActivationType(), traits, "Main");
     }
 }

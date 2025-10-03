@@ -13,6 +13,7 @@ public class PowersManager {
         return switch (power) {
             case "Super Força" -> new SuperForcaPower();
             case "SuperTeleporte" -> new SuperTeleporteMainPower();
+            case "Suppressor" -> new SupressionPower();
             case "SuperSpeed" -> new SuperSpeedPower();
             case "Scale" -> new IncreaseScalePower();
             case "Fireball" -> new FireballPower();
@@ -70,6 +71,7 @@ public class PowersManager {
                 new SuperSpeedPowerDecrease(),
                 new SuperTeleporteMainPower(),
                 new SuperTeleporteSecondaryPower(),
+                new SupressionPower(),
                 new FireballPower(),
                 new VooPower(),
                 new VelocidadePower(),

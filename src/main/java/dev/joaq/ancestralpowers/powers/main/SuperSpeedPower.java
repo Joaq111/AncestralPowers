@@ -15,7 +15,6 @@ public class SuperSpeedPower implements Power {
     private static final Identifier ATTACK_SPEED_ID = Identifier.of("ancestralpowers", "super_attack_speed");
     private static final Identifier SUBMERGED_SPEED_ID = Identifier.of("ancestralpowers", "super_submerged_speed");
     private static final Identifier BLOCK_SPEED_ID = Identifier.of("ancestralpowers", "super_block_speed");
-//    private static final Identifier SNEAKING_SPEED_ID = Identifier.of("ancestralpowers", "super_sneaking_speed");
 
     private static final double INCREMENT = 0.25;
 
@@ -33,8 +32,6 @@ public class SuperSpeedPower implements Power {
         EntityAttributeInstance attackSpeedAttr = player.getAttributeInstance(EntityAttributes.ATTACK_SPEED);
         EntityAttributeInstance submergedSpeedAttr = player.getAttributeInstance(EntityAttributes.SUBMERGED_MINING_SPEED);
         EntityAttributeInstance blockSpeedAttr = player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED);
-//        EntityAttributeInstance sneakingSpeedAttr = player.getAttributeInstance(EntityAttributes.SNEAKING_SPEED);
-
 
         if (speedAttr == null || attackSpeedAttr == null ||submergedSpeedAttr == null ||blockSpeedAttr == null) return;
 
@@ -75,13 +72,6 @@ public class SuperSpeedPower implements Power {
                 EntityAttributeModifier.Operation.ADD_VALUE
         ));
 
-//        sneakingSpeedAttr.removeModifier(SNEAKING_SPEED_ID);
-//        sneakingSpeedAttr.addPersistentModifier(new EntityAttributeModifier(
-//                SNEAKING_SPEED_ID,
-//                currentScale/4,
-//                EntityAttributeModifier.Operation.ADD_VALUE
-//        ));
-
         traits.setActPower_main(false);
     }
 
@@ -96,10 +86,6 @@ public class SuperSpeedPower implements Power {
         removeModifier(speedAttr, SUBMERGED_SPEED_ID);
         EntityAttributeInstance blockSpeedAttr = player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED);
         removeModifier(speedAttr, BLOCK_SPEED_ID);
-//        EntityAttributeInstance sneakingSpeedAttr = player.getAttributeInstance(EntityAttributes.SNEAKING_SPEED);
-//        removeModifier(speedAttr, SNEAKING_SPEED_ID);
-
-
 
         PlayerTraits traits = MyComponents.TRAITS.get(player);
         traits.setScaleMultiplier(1.0);
