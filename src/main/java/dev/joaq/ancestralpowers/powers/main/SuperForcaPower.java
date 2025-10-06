@@ -2,7 +2,6 @@ package dev.joaq.ancestralpowers.powers.main;
 
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
-import dev.joaq.ancestralpowers.powers.Power;
 import dev.joaq.ancestralpowers.powers.PowerBase;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;

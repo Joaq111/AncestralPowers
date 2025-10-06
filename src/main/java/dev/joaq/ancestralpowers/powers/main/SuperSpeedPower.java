@@ -41,7 +41,7 @@ public class SuperSpeedPower implements Power {
         currentScale += INCREMENT;
         traits.setScaleMultiplier(currentScale);
 
-        if (currentScale > 16) currentScale = 16;
+        if (currentScale > 10) currentScale = 10;
         traits.setScaleMultiplier(currentScale);
 
         speedAttr.removeModifier(MOVEMENT_SPEED_ID);

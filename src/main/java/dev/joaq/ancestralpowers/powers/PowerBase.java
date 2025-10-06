@@ -55,6 +55,46 @@ public abstract class PowerBase implements Power {
     public void reset(ServerPlayerEntity player) {}
 
     public final void execute(ServerPlayerEntity player, boolean activate,
+                              String activateType, PlayerTraits traits, String powerType, boolean customActivate) {
+
+        if (!"PRESS-PERSISTENT".equals(activateType)) return;
+
+        // Verifica se pode ativar (stamina, efeitos, etc)
+        if (!canActivate(player, activate, traits, activateType, powerType)) {
+            traits.setActPower_main(false);
+            traits.setActPower_secondary(false);
+            return;
+        }
+
+        if (activate) {
+            executeLogic(player, true, traits.getStamina());
+
+            if (customActivate && traits.getStamina() >= staminaCost()) {
+                spendStamina(traits, staminaCost());
+            } else if (!customActivate) {
+                return;
+            } else if (traits.getStamina() < staminaCost()) {
+                player.sendMessage(Text.literal("§eVocê está cansado demais para usar esse poder!"), true);
+                disablePower(traits, powerType, player);
+            }
+
+            // Reset dos flags para permitir novo clique
+            traits.setActPower_main(false);
+            traits.setActPower_secondary(false);
+        } else {
+            if (customActivate && traits.getStamina() >= staminaCost()) {
+                spendStamina(traits, staminaCost());
+            } else if (!customActivate) {
+                return;
+            } else if (traits.getStamina() < staminaCost()) {
+                player.sendMessage(Text.literal("§eVocê está cansado demais para usar esse poder!"), true);
+                disablePower(traits, powerType, player);
+            }
+
+        }
+    }
+
+    public final void execute(ServerPlayerEntity player, boolean activate,
                               String activateType, PlayerTraits traits, String powerType) {
 
         if (!canActivate(player, activate, traits, activateType, powerType)) return;
