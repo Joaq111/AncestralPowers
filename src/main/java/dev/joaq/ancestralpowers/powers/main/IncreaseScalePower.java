@@ -11,11 +11,9 @@ import net.minecraft.util.Identifier;
 
 public class IncreaseScalePower extends PowerBase {
 
+    private static final Identifier SCALE_ID = Identifier.of("ancestralpowers", "scale");
     private static final Identifier MOVEMENT_SPEED_ID = Identifier.of("ancestralpowers", "move_speed");
-    private static final Identifier ATTACK_SPEED_ID = Identifier.of("ancestralpowers", "super_attack_speed");
-    private static final Identifier SUBMERGED_SPEED_ID = Identifier.of("ancestralpowers", "super_submerged_speed");
-    private static final Identifier BLOCK_SPEED_ID = Identifier.of("ancestralpowers", "super_block_speed");
-
+    private static final Identifier JUMP_STRENGTH_ID = Identifier.of("ancestralpowers", "jump_strength");
     private static final double INCREMENT = 0.25;
 
     private void removeModifier(EntityAttributeInstance attr, Identifier id) {
@@ -36,17 +34,13 @@ public class IncreaseScalePower extends PowerBase {
 
     @Override
     protected void disablePowerSpecific(ServerPlayerEntity player) {
+        EntityAttributeInstance scaleAttr = player.getAttributeInstance(EntityAttributes.SCALE);
         EntityAttributeInstance speedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
+        EntityAttributeInstance jumpAttr = player.getAttributeInstance(EntityAttributes.JUMP_STRENGTH);
+
+        removeModifier(scaleAttr, SCALE_ID);
         removeModifier(speedAttr, MOVEMENT_SPEED_ID);
-
-        EntityAttributeInstance attackSpeedAttr = player.getAttributeInstance(EntityAttributes.ATTACK_SPEED);
-        removeModifier(attackSpeedAttr, ATTACK_SPEED_ID);
-
-        EntityAttributeInstance submergedSpeedAttr = player.getAttributeInstance(EntityAttributes.SUBMERGED_MINING_SPEED);
-        removeModifier(submergedSpeedAttr, SUBMERGED_SPEED_ID);
-
-        EntityAttributeInstance blockSpeedAttr = player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED);
-        removeModifier(blockSpeedAttr, BLOCK_SPEED_ID);
+        removeModifier(jumpAttr, JUMP_STRENGTH_ID);
 
         PlayerTraits traits = MyComponents.TRAITS.get(player);
         traits.setScaleMultiplier(1.0);
@@ -55,13 +49,12 @@ public class IncreaseScalePower extends PowerBase {
     }
 
     @Override
-    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+        EntityAttributeInstance scaleAttr = player.getAttributeInstance(EntityAttributes.SCALE);
         EntityAttributeInstance speedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
-        EntityAttributeInstance attackSpeedAttr = player.getAttributeInstance(EntityAttributes.ATTACK_SPEED);
-        EntityAttributeInstance submergedSpeedAttr = player.getAttributeInstance(EntityAttributes.SUBMERGED_MINING_SPEED);
-        EntityAttributeInstance blockSpeedAttr = player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED);
+        EntityAttributeInstance jumpAttr = player.getAttributeInstance(EntityAttributes.JUMP_STRENGTH);
 
-        if (speedAttr == null || attackSpeedAttr == null || submergedSpeedAttr == null || blockSpeedAttr == null) return;
+        if (scaleAttr == null || speedAttr == null || jumpAttr == null) return false;
 
         PlayerTraits traits = MyComponents.TRAITS.get(player);
         double currentScale = traits.getScaleMultiplier();
@@ -70,6 +63,15 @@ public class IncreaseScalePower extends PowerBase {
         if (currentScale > 16) currentScale = 16;
         traits.setScaleMultiplier(currentScale);
 
+        // Scale
+        scaleAttr.removeModifier(SCALE_ID);
+        scaleAttr.addPersistentModifier(new EntityAttributeModifier(
+                SCALE_ID,
+                currentScale - 1,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ));
+
+        // Speed
         speedAttr.removeModifier(MOVEMENT_SPEED_ID);
         speedAttr.addPersistentModifier(new EntityAttributeModifier(
                 MOVEMENT_SPEED_ID,
@@ -77,31 +79,19 @@ public class IncreaseScalePower extends PowerBase {
                 EntityAttributeModifier.Operation.ADD_VALUE
         ));
 
-        attackSpeedAttr.removeModifier(ATTACK_SPEED_ID);
-        attackSpeedAttr.addPersistentModifier(new EntityAttributeModifier(
-                ATTACK_SPEED_ID,
-                currentScale / 4,
+        // Jump Strength
+        jumpAttr.removeModifier(JUMP_STRENGTH_ID);
+        jumpAttr.addPersistentModifier(new EntityAttributeModifier(
+                JUMP_STRENGTH_ID,
+                currentScale - 1,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ));
-
-        submergedSpeedAttr.removeModifier(SUBMERGED_SPEED_ID);
-        submergedSpeedAttr.addPersistentModifier(new EntityAttributeModifier(
-                SUBMERGED_SPEED_ID,
-                currentScale,
-                EntityAttributeModifier.Operation.ADD_VALUE
-        ));
-
-        blockSpeedAttr.removeModifier(BLOCK_SPEED_ID);
-        blockSpeedAttr.addPersistentModifier(new EntityAttributeModifier(
-                BLOCK_SPEED_ID,
-                currentScale * 2,
-                EntityAttributeModifier.Operation.ADD_VALUE
-        ));
+        return true;
     }
 
     protected boolean customIsActive(ServerPlayerEntity player) {
-        EntityAttributeInstance speedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
-        return speedAttr != null && speedAttr.getModifier(MOVEMENT_SPEED_ID) != null;
+        EntityAttributeInstance scaleAttr = player.getAttributeInstance(EntityAttributes.SCALE);
+        return scaleAttr != null && scaleAttr.getModifier(SCALE_ID) != null;
     }
 
     @Override

@@ -9,7 +9,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
-public class VelocidadePower extends PowerBase {
+public class SpeedPower extends PowerBase {
 
     private static final Identifier MOVEMENT_SPEED_ID = Identifier.of("ancestralpowers", "super_speed");
     private static final Identifier ATTACK_SPEED_ID = Identifier.of("ancestralpowers", "super_attack_speed");
@@ -29,11 +29,10 @@ public class VelocidadePower extends PowerBase {
 
     @Override
     protected void disablePowerSpecific(ServerPlayerEntity player) {
-        // Nada específico além do reset padrão
     }
 
     @Override
-    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         EntityAttributeInstance movementSpeedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
         EntityAttributeInstance attackSpeedAttr = player.getAttributeInstance(EntityAttributes.ATTACK_SPEED);
         EntityAttributeInstance submergedSpeedAttr = player.getAttributeInstance(EntityAttributes.SUBMERGED_MINING_SPEED);
@@ -47,13 +46,14 @@ public class VelocidadePower extends PowerBase {
         removeModifier(blockSpeedAttr, BLOCK_SPEED_ID);
         removeModifier(sneakingSpeedAttr, SNEAKING_SPEED_ID);
 
-        if (!activate) return;
+        if (!activate) return false;
 
         addModifier(movementSpeedAttr, MOVEMENT_SPEED_ID, 0.1);
         addModifier(attackSpeedAttr, ATTACK_SPEED_ID, 1.0);
         addModifier(submergedSpeedAttr, SUBMERGED_SPEED_ID, 0.25);
         addModifier(blockSpeedAttr, BLOCK_SPEED_ID, 0.5);
         addModifier(sneakingSpeedAttr, SNEAKING_SPEED_ID, 0.15);
+        return true;
     }
 
     private void removeModifier(EntityAttributeInstance attr, Identifier id) {

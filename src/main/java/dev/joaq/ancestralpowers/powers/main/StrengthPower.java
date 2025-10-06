@@ -9,7 +9,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
-public class SuperForcaPower extends PowerBase {
+public class StrengthPower extends PowerBase {
 
     private static final Identifier SUPER_FORCA_ID = Identifier.of("ancestralpowers", "super_forca");
 
@@ -29,9 +29,9 @@ public class SuperForcaPower extends PowerBase {
     }
 
     @Override
-    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         EntityAttributeInstance attackAttr = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
-        if (attackAttr == null) return;
+        if (attackAttr == null) return false;
 
         EntityAttributeModifier existing = attackAttr.getModifier(SUPER_FORCA_ID);
         if (existing != null) attackAttr.removeModifier(existing);
@@ -41,6 +41,7 @@ public class SuperForcaPower extends PowerBase {
                 10.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ));
+        return true;
     }
 
     @Override

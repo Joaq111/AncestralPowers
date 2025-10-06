@@ -1,18 +1,36 @@
 package dev.joaq.ancestralpowers.powers.main;
 
-import dev.joaq.ancestralpowers.powers.Power;
+import dev.joaq.ancestralpowers.powers.PowerBase;
 import dev.joaq.ancestralpowers.registry.ModEffects;
 import dev.joaq.ancestralpowers.util.PlayerUtils;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-public class SupressionPower implements Power {
+public class SuppressionPower extends PowerBase {
 
     @Override
     public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
-        if (!activate) return;
 
+    }
+
+    @Override
+    protected float staminaCost() {
+        return 0.5f;
+    }
+
+    @Override
+    protected String ActivationType() {
+        return "TOGGLE";
+    }
+
+    @Override
+    protected void disablePowerSpecific(ServerPlayerEntity player) {
+
+    }
+
+    @Override
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         ServerPlayerEntity target = PlayerUtils.getPlayerLookedAt(player, 20.0D);
         if (target != null) {
 
@@ -27,12 +45,12 @@ public class SupressionPower implements Power {
                     StatusEffects.GLOWING,
                     1,
                     0,
-                    false,
-                    false
+                    true,
+                    true
             ));
+            return true;
         }
+        return true;
     }
 
-    @Override
-    public void reset(ServerPlayerEntity player) { }
 }

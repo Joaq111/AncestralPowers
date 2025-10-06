@@ -8,9 +8,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 public class ImortalPower extends PowerBase {
 
     @Override
-    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
 
-
+    return true;
     }
 
     @Override

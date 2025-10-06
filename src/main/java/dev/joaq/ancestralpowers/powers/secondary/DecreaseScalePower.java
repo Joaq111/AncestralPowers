@@ -2,7 +2,6 @@ package dev.joaq.ancestralpowers.powers.secondary;
 
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
-import dev.joaq.ancestralpowers.powers.Power;
 import dev.joaq.ancestralpowers.powers.PowerBase;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -51,20 +50,20 @@ public class DecreaseScalePower extends PowerBase {
     }
 
     @Override
-    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
 
         EntityAttributeInstance scaleAttr = player.getAttributeInstance(EntityAttributes.SCALE);
         EntityAttributeInstance speedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
         EntityAttributeInstance jumpAttr = player.getAttributeInstance(EntityAttributes.JUMP_STRENGTH);
 
-        if (scaleAttr == null || speedAttr == null || jumpAttr == null) return;
+        if (scaleAttr == null || speedAttr == null || jumpAttr == null) return false;
 
         PlayerTraits traits = MyComponents.TRAITS.get(player);
         double currentScale = traits.getScaleMultiplier();
         currentScale += INCREMENT;
         traits.setScaleMultiplier(currentScale);
 
-        if (currentScale > 16) currentScale = 16;
+        if (currentScale < 0.5) currentScale = 0.5;
         traits.setScaleMultiplier(currentScale);
 
         scaleAttr.removeModifier(SCALE_ID);
@@ -73,21 +72,7 @@ public class DecreaseScalePower extends PowerBase {
                 currentScale - 1,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ));
-
-        speedAttr.removeModifier(MOVEMENT_SPEED_ID);
-        speedAttr.addPersistentModifier(new EntityAttributeModifier(
-                MOVEMENT_SPEED_ID,
-                currentScale/10 - 0.1,
-                EntityAttributeModifier.Operation.ADD_VALUE
-        ));
-
-        jumpAttr.removeModifier(JUMP_STRENGTH_ID);
-        jumpAttr.addPersistentModifier(new EntityAttributeModifier(
-                JUMP_STRENGTH_ID,
-                currentScale -1,
-                EntityAttributeModifier.Operation.ADD_VALUE
-        ));
-
+        return true;
     }
 
     protected boolean customIsActive(ServerPlayerEntity player) {

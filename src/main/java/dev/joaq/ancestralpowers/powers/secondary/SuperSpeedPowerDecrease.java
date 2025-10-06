@@ -2,7 +2,6 @@ package dev.joaq.ancestralpowers.powers.secondary;
 
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
-import dev.joaq.ancestralpowers.powers.Power;
 import dev.joaq.ancestralpowers.powers.PowerBase;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -56,13 +55,13 @@ public class SuperSpeedPowerDecrease extends PowerBase {
     }
 
     @Override
-    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         EntityAttributeInstance speedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
         EntityAttributeInstance attackSpeedAttr = player.getAttributeInstance(EntityAttributes.ATTACK_SPEED);
         EntityAttributeInstance submergedSpeedAttr = player.getAttributeInstance(EntityAttributes.SUBMERGED_MINING_SPEED);
         EntityAttributeInstance blockSpeedAttr = player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED);
 
-        if (speedAttr == null || attackSpeedAttr == null || submergedSpeedAttr == null || blockSpeedAttr == null) return;
+        if (speedAttr == null || attackSpeedAttr == null || submergedSpeedAttr == null || blockSpeedAttr == null) return false;
 
         PlayerTraits traits = MyComponents.TRAITS.get(player);
         double currentScale = traits.getScaleMultiplier();
@@ -98,6 +97,7 @@ public class SuperSpeedPowerDecrease extends PowerBase {
                 currentScale * 2,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ));
+        return true;
     }
 
     protected boolean customIsActive(ServerPlayerEntity player) {

@@ -11,9 +11,9 @@ public class PowersManager {
 
     private static Power getPower(String power) {
         return switch (power) {
-            case "Super Força" -> new SuperForcaPower();
-            case "SuperTeleporte" -> new SuperTeleporteMainPower();
-            case "Suppressor" -> new SupressionPower();
+            case "Super Força" -> new StrengthPower();
+            case "SuperTeleporte" -> new SuperTeleportMainPower();
+            case "Suppressor" -> new SuppressionPower();
             case "SuperSpeed" -> new SuperSpeedPower();
             case "Scale" -> new IncreaseScalePower();
             case "Fireball" -> new FireballPower();
@@ -23,12 +23,12 @@ public class PowersManager {
     }
     private static Power getPowerSecondary(String power) {
         return switch (power) {
-            case "SuperTeleporte" -> new SuperTeleporteSecondaryPower();
+            case "SuperTeleporte" -> new SuperTeleportSecondaryPower();
             case "Scale" -> new DecreaseScalePower();
             case "SuperSpeed" -> new SuperSpeedPowerDecrease();
-            case "Voo" -> new VooPower();
-            case "Velocidade" -> new VelocidadePower();
-            case "Teleporte" -> new TelepotePower();
+            case "Voo" -> new FlyPower();
+            case "Velocidade" -> new SpeedPower();
+            case "Teleporte" -> new TeleportPower();
 
             default -> null;
         };
@@ -45,20 +45,6 @@ public class PowersManager {
         if (p != null) p.apply(player, activate, stamina);
     }
 
-    public static void applyIntelligence(ServerPlayerEntity player, String power) {
-        switch(power) {
-            case "Burro":
-                // nada especial
-                break;
-            case "Inteligente":
-                // mais XP, exemplo
-                break;
-            case "Gênio":
-                // XP ainda mais, talvez loot bonus
-                break;
-        }
-    }
-
 
     public static void resetAll(ServerPlayerEntity player) {
         PlayerTraits traits = MyComponents.TRAITS.get(player);
@@ -66,22 +52,22 @@ public class PowersManager {
         traits.setActPower_secondary(false);
 
         Power[] powers = {
-                new SuperForcaPower(),
+                new StrengthPower(),
                 new SuperSpeedPower(),
                 new SuperSpeedPowerDecrease(),
-                new SuperTeleporteMainPower(),
-                new SuperTeleporteSecondaryPower(),
-                new SupressionPower(),
+                new SuperTeleportMainPower(),
+                new SuperTeleportSecondaryPower(),
+                new SuppressionPower(),
                 new FireballPower(),
-                new VooPower(),
-                new VelocidadePower(),
+                new FlyPower(),
+                new SpeedPower(),
                 new IncreaseScalePower(),
                 new DecreaseScalePower(),
-                new TelepotePower()
+                new TeleportPower()
 
         };
         for (Power p : powers) {
-            if (p != null) p.reset(player);
+            p.reset(player);
         }
 
     }

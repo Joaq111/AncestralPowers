@@ -1,7 +1,8 @@
 package dev.joaq.ancestralpowers.powers.secondary;
 
 import dev.joaq.ancestralpowers.components.MyComponents;
-import dev.joaq.ancestralpowers.powers.Power;
+import dev.joaq.ancestralpowers.components.PlayerTraits;
+import dev.joaq.ancestralpowers.powers.PowerBase;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -9,20 +10,38 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class SuperTeleporteSecondaryPower implements Power {
+public class SuperTeleportSecondaryPower extends PowerBase {
 
     @Override
     public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
-        if (!activate) return;
+        PlayerTraits traits = MyComponents.TRAITS.get(player);
+        execute(player, activate, ActivationType(), traits, "Secondary");
+    }
+
+    @Override
+    protected float staminaCost() {
+        return 0.5f;
+    }
+
+    @Override
+    protected String ActivationType() {
+        return "TOGGLE";
+    }
+
+    @Override
+    protected void disablePowerSpecific(ServerPlayerEntity player) {
+
+    }
+
+    @Override
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
 
         Vec3d targetPos = getTargetGroundPosition(player, 50);
         spawnCircleParticles(player, targetPos, 1.5, 15);
 
         MyComponents.TRAITS.get(player).setTeleportTarget(targetPos);
+        return true;
     }
-
-    @Override
-    public void reset(ServerPlayerEntity player) {}
 
     private Vec3d getTargetGroundPosition(ServerPlayerEntity player, int maxDistance) {
         Vec3d start = player.getEyePos();
@@ -37,7 +56,7 @@ public class SuperTeleporteSecondaryPower implements Power {
             lastSafe = checkPos;
         }
 
-        // desce até o chão
+
         BlockPos ground = new BlockPos((int)lastSafe.x, (int)lastSafe.y, (int)lastSafe.z);
         while (world.getBlockState(ground.down()).isAir() && ground.getY() > world.getBottomY()) {
             ground = ground.down();

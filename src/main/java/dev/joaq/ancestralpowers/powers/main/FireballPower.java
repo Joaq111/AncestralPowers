@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3d;
 public class FireballPower extends PowerBase {
 
     @Override
-    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
 
         Vec3d look = player.getRotationVector();
         double startX = player.getX() + look.x;
@@ -25,7 +25,7 @@ public class FireballPower extends PowerBase {
 
         fireball.updatePosition(startX, startY, startZ);
         player.getWorld().spawnEntity(fireball);
-
+        return true;
     }
 
     @Override

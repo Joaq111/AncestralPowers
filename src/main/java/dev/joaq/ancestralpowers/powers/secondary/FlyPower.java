@@ -5,8 +5,7 @@ import dev.joaq.ancestralpowers.components.PlayerTraits;
 import dev.joaq.ancestralpowers.powers.PowerBase;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-// VooPower.java
-public class VooPower extends PowerBase {
+public class FlyPower extends PowerBase {
 
     @Override
     public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
@@ -34,9 +33,10 @@ public class VooPower extends PowerBase {
     }
 
     @Override
-    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         player.getAbilities().allowFlying = true;
         player.sendAbilitiesUpdate();
+        return true;
     }
 
     @Override

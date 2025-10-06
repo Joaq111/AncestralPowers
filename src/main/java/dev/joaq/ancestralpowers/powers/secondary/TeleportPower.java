@@ -2,44 +2,48 @@ package dev.joaq.ancestralpowers.powers.secondary;
 
 import dev.joaq.ancestralpowers.components.MyComponents;
 import dev.joaq.ancestralpowers.components.PlayerTraits;
-import dev.joaq.ancestralpowers.powers.Power;
+import dev.joaq.ancestralpowers.powers.PowerBase;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class TelepotePower implements Power {
+public class TeleportPower extends PowerBase {
 
     @Override
     public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
         PlayerTraits traits = MyComponents.TRAITS.get(player);
-        if (!activate) return;
+        execute(player, activate, ActivationType(), traits, "Secondary");
+    }
 
-        if (stamina < 25) {
-            traits.setActPower_secondary(false);
-            return;
-        }
+    @Override
+    protected float staminaCost() {
+        return 25;
+    }
+
+    @Override
+    protected String ActivationType() {
+        return "PRESS";
+    }
+
+    @Override
+    protected void disablePowerSpecific(ServerPlayerEntity player) {
+
+    }
+
+    @Override
+    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+        PlayerTraits traits = MyComponents.TRAITS.get(player);
+
         Vec3d targetPos = getTargetGroundPosition(player, 10);
         MyComponents.TRAITS.get(player).setTeleportTarget(targetPos);
-
-        if (targetPos == null) {
-            player.sendMessage(Text.literal("⚠ Defina um alvo com o poder secundário antes de teleportar!"), true);
-            traits.setActPower_secondary(false);
-
-            return;
-        }
 
         player.teleport(targetPos.x, targetPos.y, targetPos.z, true);
         player.fallDistance = 0;
 
-        traits.setStamina(traits.getStamina() - 25);
-        traits.setActPower_secondary(false);
         traits.clearTeleportTarget();
+        return true;
     }
-
-    @Override
-    public void reset(ServerPlayerEntity player) {}
 
     private Vec3d getTargetGroundPosition(ServerPlayerEntity player, int maxDistance) {
         Vec3d start = player.getEyePos();
@@ -54,7 +58,6 @@ public class TelepotePower implements Power {
             lastSafe = checkPos;
         }
 
-        // desce até o chão
         BlockPos ground = new BlockPos((int)lastSafe.x, (int)lastSafe.y, (int)lastSafe.z);
         while (world.getBlockState(ground.down()).isAir() && ground.getY() > world.getBottomY()) {
             ground = ground.down();
