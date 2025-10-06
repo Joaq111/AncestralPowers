@@ -25,6 +25,11 @@ public class SuperForcaPower extends PowerBase {
     }
 
     @Override
+    protected void disablePowerSpecific(ServerPlayerEntity player) {
+
+    }
+
+    @Override
     protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         EntityAttributeInstance attackAttr = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
         if (attackAttr == null) return;

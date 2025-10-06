@@ -9,24 +9,20 @@ import org.lwjgl.glfw.GLFW;
 
 @Environment(EnvType.CLIENT)
 public class ModKeyBinds {
-    public static KeyBinding POWER_KEY;
-    public static KeyBinding POWER_KEY2;
-
+    public static KeyBinding G_KEY;
+    public static KeyBinding R_KEY;
 
     public static void registerKeyBinds() {
+        G_KEY = KeyBindingHelper.registerKeyBinding(
+                new KeyBinding("key.ancestralpowers.toggle_g",
+                        InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "key.categories.ancestralpowers")
+        );
 
-        POWER_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.ancestralpowers.use_power", // tradução no lang
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_R,                // tecla padrão (R)
-                "category.ancestralpowers"      // categoria no menu de controles
-        ));
-        POWER_KEY2 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.ancestralpowers.use_secondary_power", // tradução no lang
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_G,                // tecla padrão (G)
-                "category.ancestralpowers"      // categoria no menu de controles
-        ));
+        R_KEY = KeyBindingHelper.registerKeyBinding(
+                new KeyBinding("key.ancestralpowers.toggle_r",
+                        InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.ancestralpowers")
+        );
     }
+
 
 }

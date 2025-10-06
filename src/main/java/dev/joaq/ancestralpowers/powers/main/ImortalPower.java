@@ -9,8 +9,6 @@ import net.minecraft.text.Text;
 
 public class ImortalPower extends PowerBase {
 
-    private boolean registered = false;
-
     @Override
     protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
 
@@ -31,6 +29,11 @@ public class ImortalPower extends PowerBase {
     @Override
     protected String ActivationType() {
         return "TOGGLE";
+    }
+
+    @Override
+    protected void disablePowerSpecific(ServerPlayerEntity player) {
+
     }
 
 

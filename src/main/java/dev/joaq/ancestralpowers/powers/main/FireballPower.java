@@ -40,6 +40,11 @@ public class FireballPower extends PowerBase {
     }
 
     @Override
+    protected void disablePowerSpecific(ServerPlayerEntity player) {
+
+    }
+
+    @Override
     public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
         PlayerTraits traits = MyComponents.TRAITS.get(player);
         execute(player, activate, ActivationType(), traits, "Main");
