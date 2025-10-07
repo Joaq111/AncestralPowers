@@ -11,7 +11,8 @@ import net.minecraft.util.Identifier;
 
 public class StrengthPower extends PowerBase {
 
-    private static final Identifier SUPER_FORCA_ID = Identifier.of("ancestralpowers", "super_forca");
+    private static final Identifier ATTACK_DAMAGE_ID = Identifier.of("ancestralpowers", "attack_damage");
+
 
     @Override
     protected float staminaCost() {
@@ -25,37 +26,51 @@ public class StrengthPower extends PowerBase {
 
     @Override
     protected void disablePowerSpecific(ServerPlayerEntity player) {
+        EntityAttributeInstance attackDamageAttr = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
 
+        removeModifier(attackDamageAttr, ATTACK_DAMAGE_ID);
+
+        PlayerTraits traits = MyComponents.TRAITS.get(player);
+        traits.setActPower_main(false);
     }
 
     @Override
-    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
-        EntityAttributeInstance attackAttr = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
-        if (attackAttr == null) return false;
+    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+        EntityAttributeInstance attackDamageAttr = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
 
-        EntityAttributeModifier existing = attackAttr.getModifier(SUPER_FORCA_ID);
-        if (existing != null) attackAttr.removeModifier(existing);
+        if (attackDamageAttr == null ) return;
 
-        attackAttr.addPersistentModifier(new EntityAttributeModifier(
-                SUPER_FORCA_ID,
-                10.0,
-                EntityAttributeModifier.Operation.ADD_VALUE
-        ));
-        return true;
+
+        removeModifier(attackDamageAttr, ATTACK_DAMAGE_ID);
+
+
+        addModifier(attackDamageAttr, ATTACK_DAMAGE_ID, 1000);
+
+    }
+
+    private void removeModifier(EntityAttributeInstance attr, Identifier id) {
+        if (attr == null) return;
+        EntityAttributeModifier existing = attr.getModifier(id);
+        if (existing != null) attr.removeModifier(existing);
+    }
+
+    private void addModifier(EntityAttributeInstance attr, Identifier id, double value) {
+        attr.addPersistentModifier(new EntityAttributeModifier(id, value, EntityAttributeModifier.Operation.ADD_VALUE));
     }
 
     @Override
     public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
         PlayerTraits traits = MyComponents.TRAITS.get(player);
-        execute(player, activate, ActivationType(), traits, "Main");
+        execute(player, activate, ActivationType(), traits, "Specific");
     }
 
     @Override
     public void reset(ServerPlayerEntity player) {
-        EntityAttributeInstance attackAttr = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
-        if (attackAttr == null) return;
 
-        EntityAttributeModifier existing = attackAttr.getModifier(SUPER_FORCA_ID);
-        if (existing != null) attackAttr.removeModifier(existing);
+        EntityAttributeInstance attackDamageAttr = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE   );
+
+
+        removeModifier(attackDamageAttr, ATTACK_DAMAGE_ID);
+
     }
 }

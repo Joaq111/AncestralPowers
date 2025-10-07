@@ -11,7 +11,7 @@ public abstract class PowerBase implements Power {
     protected abstract String ActivationType();
     protected abstract void disablePowerSpecific(ServerPlayerEntity player);
 
-    protected abstract boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina);
+    protected abstract void executeLogic(ServerPlayerEntity player, boolean activate, float stamina);
 
     protected void disablePower(PlayerTraits traits, String powerType, ServerPlayerEntity player) {
         switch (powerType) {
@@ -55,25 +55,47 @@ public abstract class PowerBase implements Power {
                               String activateType, PlayerTraits traits, String powerType, boolean customActivate) {
 
         if (!"PRESS-PERSISTENT".equals(activateType)) return;
-        if (!canActivate(player, activate, traits, activateType, powerType)) return;
 
-        if (activate) {
-            boolean executed = executeLogic(player, true, traits.getStamina());
-
-            if (executed && traits.getStamina() >= staminaCost()) {
-                spendStamina(traits, staminaCost());
-            } else if (!executed) {
-                // se o poder não executou, não gasta stamina
+        try {
+            if (!canActivate(player, activate, traits, activateType, powerType)) {
                 traits.setActPower_main(false);
                 traits.setActPower_secondary(false);
-            } else {
-                player.sendMessage(Text.literal("§eVocê está cansado demais para usar esse poder!"), true);
-                disablePower(traits, powerType, player);
+                return;
             }
-        } else {
-            disablePower(traits, powerType, player);
+
+            if (activate) {
+
+                executeLogic(player, true, traits.getStamina());
+
+                if (customActivate) {
+                    if (traits.getStamina() >= staminaCost()) {
+                        spendStamina(traits, staminaCost());
+                    } else {
+                        player.sendMessage(Text.literal("§eVocê está cansado demais para usar esse poder!"), true);
+                        disablePower(traits, powerType, player);
+                    }
+                }
+
+                traits.setActPower_main(false);
+                traits.setActPower_secondary(false);
+            }
+            if (customActivate) {
+                if (traits.getStamina() >= staminaCost()) {
+                    spendStamina(traits, staminaCost());
+                } else {
+                    player.sendMessage(Text.literal("§eVocê está cansado demais para usar esse poder!"), true);
+                    disablePower(traits, powerType, player);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("[PowerBase] Erro ao executar poder: " + e.getMessage());
+            e.printStackTrace();
+            traits.setActPower_main(false);
+            traits.setActPower_secondary(false);
         }
     }
+
 
     public final void execute(ServerPlayerEntity player, boolean activate,
                               String activateType, PlayerTraits traits, String powerType) {
@@ -82,14 +104,14 @@ public abstract class PowerBase implements Power {
 
         switch (activateType) {
             case "PRESS" -> {
-                boolean executed = executeLogic(player, activate, traits.getStamina());
-                if (executed) spendStamina(traits, staminaCost());
+                executeLogic(player, activate, traits.getStamina());
+                spendStamina(traits, staminaCost());
                 disablePower(traits, powerType, player);
             }
             case "TOGGLE", "HOLD" -> {
                 if (activate) {
-                    boolean executed = executeLogic(player, true, traits.getStamina());
-                    if (executed) spendStamina(traits, staminaCost());
+                    executeLogic(player, true, traits.getStamina());
+                    spendStamina(traits, staminaCost());
                 } else {
                     disablePower(traits, powerType, player);
                 }

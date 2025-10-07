@@ -1,5 +1,7 @@
 package dev.joaq.ancestralpowers.powers.main;
 
+import dev.joaq.ancestralpowers.components.MyComponents;
+import dev.joaq.ancestralpowers.components.PlayerTraits;
 import dev.joaq.ancestralpowers.powers.PowerBase;
 import dev.joaq.ancestralpowers.registry.ModEffects;
 import dev.joaq.ancestralpowers.util.PlayerUtils;
@@ -11,7 +13,8 @@ public class SuppressionPower extends PowerBase {
 
     @Override
     public void apply(ServerPlayerEntity player, boolean activate, float stamina) {
-
+        PlayerTraits traits = MyComponents.TRAITS.get(player);
+        execute(player, activate, ActivationType(), traits, "Main");
     }
 
     @Override
@@ -30,7 +33,7 @@ public class SuppressionPower extends PowerBase {
     }
 
     @Override
-    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         ServerPlayerEntity target = PlayerUtils.getPlayerLookedAt(player, 20.0D);
         if (target != null) {
 
@@ -39,18 +42,19 @@ public class SuppressionPower extends PowerBase {
                     1,
                     0,
                     false,
+                    false,
                     false
             ));
             target.addStatusEffect(new StatusEffectInstance(
                     StatusEffects.GLOWING,
                     1,
-                    0,
+                    1,
                     true,
-                    true
+                    false,
+                    false
             ));
-            return true;
+
         }
-        return true;
     }
 
 }

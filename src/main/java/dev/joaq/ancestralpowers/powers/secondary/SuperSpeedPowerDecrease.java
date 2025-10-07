@@ -16,7 +16,8 @@ public class SuperSpeedPowerDecrease extends PowerBase {
     private static final Identifier SUBMERGED_SPEED_ID = Identifier.of("ancestralpowers", "super_submerged_speed");
     private static final Identifier BLOCK_SPEED_ID = Identifier.of("ancestralpowers", "super_block_speed");
 
-    private static final double INCREMENT = -0.25;
+    private static final double INCREMENT = -1;
+    private static final double EPS = 0.001;
 
     private void removeModifier(EntityAttributeInstance attr, Identifier id) {
         if (attr == null) return;
@@ -36,16 +37,15 @@ public class SuperSpeedPowerDecrease extends PowerBase {
 
     @Override
     protected void disablePowerSpecific(ServerPlayerEntity player) {
-        EntityAttributeInstance speedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
-        removeModifier(speedAttr, MOVEMENT_SPEED_ID);
-
         EntityAttributeInstance attackSpeedAttr = player.getAttributeInstance(EntityAttributes.ATTACK_SPEED);
-        removeModifier(attackSpeedAttr, ATTACK_SPEED_ID);
-
         EntityAttributeInstance submergedSpeedAttr = player.getAttributeInstance(EntityAttributes.SUBMERGED_MINING_SPEED);
-        removeModifier(submergedSpeedAttr, SUBMERGED_SPEED_ID);
-
+        EntityAttributeInstance speedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
         EntityAttributeInstance blockSpeedAttr = player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED);
+
+
+        removeModifier(speedAttr, MOVEMENT_SPEED_ID);
+        removeModifier(attackSpeedAttr, ATTACK_SPEED_ID);
+        removeModifier(submergedSpeedAttr, SUBMERGED_SPEED_ID);
         removeModifier(blockSpeedAttr, BLOCK_SPEED_ID);
 
         PlayerTraits traits = MyComponents.TRAITS.get(player);
@@ -55,54 +55,46 @@ public class SuperSpeedPowerDecrease extends PowerBase {
     }
 
     @Override
-    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         EntityAttributeInstance speedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
         EntityAttributeInstance attackSpeedAttr = player.getAttributeInstance(EntityAttributes.ATTACK_SPEED);
         EntityAttributeInstance submergedSpeedAttr = player.getAttributeInstance(EntityAttributes.SUBMERGED_MINING_SPEED);
         EntityAttributeInstance blockSpeedAttr = player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED);
 
-        if (speedAttr == null || attackSpeedAttr == null || submergedSpeedAttr == null || blockSpeedAttr == null) return false;
+        if (speedAttr == null || attackSpeedAttr == null || submergedSpeedAttr == null || blockSpeedAttr == null) return;
 
         PlayerTraits traits = MyComponents.TRAITS.get(player);
         double currentScale = traits.getScaleMultiplier();
         currentScale += INCREMENT;
 
-        if (currentScale > 1) currentScale = 1;
+        if (currentScale < 1) currentScale = 1;
         traits.setScaleMultiplier(currentScale);
 
         speedAttr.removeModifier(MOVEMENT_SPEED_ID);
         speedAttr.addPersistentModifier(new EntityAttributeModifier(
-                MOVEMENT_SPEED_ID,
-                currentScale / 10 - 0.1,
-                EntityAttributeModifier.Operation.ADD_VALUE
+                MOVEMENT_SPEED_ID, currentScale / 10.0 - 0.1, EntityAttributeModifier.Operation.ADD_VALUE
         ));
-
-        attackSpeedAttr.removeModifier(ATTACK_SPEED_ID);
+        attackSpeedAttr.removeModifier(MOVEMENT_SPEED_ID);
         attackSpeedAttr.addPersistentModifier(new EntityAttributeModifier(
-                ATTACK_SPEED_ID,
-                currentScale / 4,
-                EntityAttributeModifier.Operation.ADD_VALUE
+                ATTACK_SPEED_ID, currentScale / 4, EntityAttributeModifier.Operation.ADD_VALUE
         ));
-
-        submergedSpeedAttr.removeModifier(SUBMERGED_SPEED_ID);
+        submergedSpeedAttr.removeModifier(MOVEMENT_SPEED_ID);
         submergedSpeedAttr.addPersistentModifier(new EntityAttributeModifier(
-                SUBMERGED_SPEED_ID,
-                currentScale,
-                EntityAttributeModifier.Operation.ADD_VALUE
+                SUBMERGED_SPEED_ID, currentScale, EntityAttributeModifier.Operation.ADD_VALUE
+        ));
+        blockSpeedAttr.removeModifier(MOVEMENT_SPEED_ID);
+        blockSpeedAttr.addPersistentModifier(new EntityAttributeModifier(
+                BLOCK_SPEED_ID, currentScale *2, EntityAttributeModifier.Operation.ADD_VALUE
         ));
 
-        blockSpeedAttr.removeModifier(BLOCK_SPEED_ID);
-        blockSpeedAttr.addPersistentModifier(new EntityAttributeModifier(
-                BLOCK_SPEED_ID,
-                currentScale * 2,
-                EntityAttributeModifier.Operation.ADD_VALUE
-        ));
-        return true;
+
+
+        traits.setScaleMultiplier(currentScale);
     }
 
     protected boolean customIsActive(ServerPlayerEntity player) {
-        EntityAttributeInstance speedAttr = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
-        return speedAttr != null && speedAttr.getModifier(MOVEMENT_SPEED_ID) != null;
+        PlayerTraits traits = MyComponents.TRAITS.get(player);
+        return Math.abs(traits.getScaleMultiplier() - 1.0) > EPS;
     }
 
     @Override
@@ -110,4 +102,9 @@ public class SuperSpeedPowerDecrease extends PowerBase {
         PlayerTraits traits = MyComponents.TRAITS.get(player);
         execute(player, activate, ActivationType(), traits, "Specific", customIsActive(player));
     }
+    @Override
+    public void reset(ServerPlayerEntity player) {
+        disablePowerSpecific(player);
+    }
+
 }

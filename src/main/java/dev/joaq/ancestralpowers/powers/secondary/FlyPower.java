@@ -33,10 +33,9 @@ public class FlyPower extends PowerBase {
     }
 
     @Override
-    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         player.getAbilities().allowFlying = true;
         player.sendAbilitiesUpdate();
-        return true;
     }
 
     @Override

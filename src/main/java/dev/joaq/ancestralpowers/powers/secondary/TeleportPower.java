@@ -32,7 +32,7 @@ public class TeleportPower extends PowerBase {
     }
 
     @Override
-    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         PlayerTraits traits = MyComponents.TRAITS.get(player);
 
         Vec3d targetPos = getTargetGroundPosition(player, 10);
@@ -42,7 +42,6 @@ public class TeleportPower extends PowerBase {
         player.fallDistance = 0;
 
         traits.clearTeleportTarget();
-        return true;
     }
 
     private Vec3d getTargetGroundPosition(ServerPlayerEntity player, int maxDistance) {

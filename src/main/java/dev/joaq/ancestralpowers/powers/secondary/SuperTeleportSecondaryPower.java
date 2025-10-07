@@ -34,13 +34,12 @@ public class SuperTeleportSecondaryPower extends PowerBase {
     }
 
     @Override
-    protected boolean executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
+    protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
 
         Vec3d targetPos = getTargetGroundPosition(player, 50);
         spawnCircleParticles(player, targetPos, 1.5, 15);
 
         MyComponents.TRAITS.get(player).setTeleportTarget(targetPos);
-        return true;
     }
 
     private Vec3d getTargetGroundPosition(ServerPlayerEntity player, int maxDistance) {
