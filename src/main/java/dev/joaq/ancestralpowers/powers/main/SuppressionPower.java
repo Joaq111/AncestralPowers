@@ -41,8 +41,7 @@ public class SuppressionPower extends PowerBase {
                     ModEffects.POWER_SUPPRESSION,
                     1,
                     0,
-                    false,
-                    false,
+                    true,
                     false
             ));
             target.addStatusEffect(new StatusEffectInstance(

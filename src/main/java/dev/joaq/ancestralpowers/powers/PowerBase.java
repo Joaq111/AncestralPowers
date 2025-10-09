@@ -102,7 +102,19 @@ public abstract class PowerBase implements Power {
 
         if (!canActivate(player, activate, traits, activateType, powerType)) return;
 
+
+
+
         switch (activateType) {
+            case "SUPER TELEPORT" -> {
+                if (!traits.getActPower_secondary()) {
+                    traits.setActPower_main(false);
+                    return;
+                }
+                executeLogic(player, activate, traits.getStamina());
+                spendStamina(traits, staminaCost());
+                disablePower(traits, powerType, player);
+            }
             case "PRESS" -> {
                 executeLogic(player, activate, traits.getStamina());
                 spendStamina(traits, staminaCost());
