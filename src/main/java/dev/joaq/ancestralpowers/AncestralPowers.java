@@ -1,6 +1,7 @@
 package dev.joaq.ancestralpowers;
 
 import dev.joaq.ancestralpowers.commands.ModCommands;
+import dev.joaq.ancestralpowers.dimensions.ModDimensions;
 import dev.joaq.ancestralpowers.events.PlayerDeathEvent;
 import dev.joaq.ancestralpowers.events.PlayerJoinEvent;
 import dev.joaq.ancestralpowers.events.PlayerPowersTickHandler;
@@ -30,7 +31,9 @@ public class AncestralPowers implements ModInitializer, ClientModInitializer, De
         PayloadTypeRegistry.playC2S().register(ToggleGPayload.PAYLOAD_ID, ToggleGPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(ToggleRPayload.PAYLOAD_ID, ToggleRPayload.CODEC);
         ModPacketsC2S.register();
+        ModDimensions.register();
         PlayerJoinEvent.register();
+        ancestralpowersStructurePlacements.registerStructurePlacementTypes();
         PlayerPowersTickHandler.register();
         ModCommands.register();
         ModEntities.register();
