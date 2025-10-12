@@ -34,7 +34,7 @@ public abstract class PowerBase implements Power {
         if ("PRESS".equals(activateType) && !activate) return false;
 
         if (player.hasStatusEffect(ModEffects.POWER_SUPPRESSION)) {
-            player.sendMessage(Text.literal("§cSeus poderes foram suprimidos!"), false);
+//            player.sendMessage(Text.literal("§cSeus poderes foram suprimidos!"), false);
             disablePower(traits, powerType, player);
             return false;
         }

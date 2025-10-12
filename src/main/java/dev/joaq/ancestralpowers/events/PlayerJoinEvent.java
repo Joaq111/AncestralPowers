@@ -35,10 +35,10 @@ public class PlayerJoinEvent {
                 traits.setActPower_secondary(false);
             }
 
-            player.sendMessage(Text.literal(
-                    "Seus poderes: " + traits.getMovementPower() + " | " +
-                            traits.getMainPower() + " | " + traits.getIntelligence() + "|" + traits.getStamina()
-            ), false);
+//            player.sendMessage(Text.literal(
+//                    "Seus poderes: " + traits.getMovementPower() + " | " +
+//                            traits.getMainPower() + " | " + traits.getIntelligence() + "|" + traits.getStamina()
+//            ), false);
         });
 
 

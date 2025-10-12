@@ -1,0 +1,20 @@
+{
+  "structures": [
+    {
+      "structure": "ancestralpowers:house1",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 60,
+    "separation": 20,
+    "salt": 2000,
+    "frequency_reduction_method": "default",
+    "frequency": 0.63,
+    "exclusion_zone": {
+      "other_set": "ancestralpowers:ancestral_pyramid",
+      "chunk_count": 5
+    }
+  }
+}

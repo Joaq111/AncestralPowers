@@ -21,6 +21,7 @@ public class ModCommands {
             // Comando /gettraits
             dispatcher.register(
                     CommandManager.literal("gettraits")
+                            .requires(source -> source.hasPermissionLevel(2))
                             .executes(context -> {
                                 ServerCommandSource source = context.getSource();
 
@@ -39,7 +40,6 @@ public class ModCommands {
                                 return 1;
                             })
             );
-            // Comando /gettraits
             dispatcher.register(
                     CommandManager.literal("gotopersonal")
                             .requires(source -> source.hasPermissionLevel(2))
@@ -62,6 +62,7 @@ public class ModCommands {
             // Comando /rerolltraits
             dispatcher.register(
                     CommandManager.literal("rerolltraits")
+                            .requires(source -> source.hasPermissionLevel(2))
                             .executes(context -> {
                                 ServerCommandSource source = context.getSource();
 

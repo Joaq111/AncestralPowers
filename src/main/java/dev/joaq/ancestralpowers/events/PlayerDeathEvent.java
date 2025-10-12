@@ -15,7 +15,7 @@ public class PlayerDeathEvent{
 
                 if ("Imortalidade".equals(traits.getMainPower()) && traits.getActPower_main()) {
                     serverPlayer.setHealth(1.0f);
-                    serverPlayer.sendMessage(Text.literal("Você foi salvo pela imortalidade!"));
+//                    serverPlayer.sendMessage(Text.literal("Você foi salvo pela imortalidade!"));
                     return false;
                 }
             }

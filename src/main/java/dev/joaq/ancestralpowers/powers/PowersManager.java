@@ -29,6 +29,7 @@ public class PowersManager {
             case "Voo" -> new FlyPower();
             case "Velocidade" -> new SpeedPower();
             case "Teleporte" -> new TeleportPower();
+            case "PersonalDimension" -> new PersonalDimensionPower();
 
             default -> null;
         };

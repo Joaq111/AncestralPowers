@@ -1,0 +1,20 @@
+{
+  "structures": [
+    {
+      "structure": "ancestralpowers:ancestral_temple",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 100,
+    "separation": 40,
+    "salt": 2000,
+    "frequency_reduction_method": "default",
+    "frequency": 0.40,
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 5
+    }
+  }
+}

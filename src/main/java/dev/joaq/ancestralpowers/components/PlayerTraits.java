@@ -8,20 +8,12 @@ import org.ladysnake.cca.api.v3.component.Component;
 
 public interface PlayerTraits extends Component {
 
-    int getMainPowerExperience();
-    void setMainPowerExperience(int mainPowerExperience);
-
-    int getSecondaryPowerExperience();
-    void setSecondaryPowerExperience(int secondaryPowerExperience);
-
-    int getMainPowerLevel();
-    void setMainPowerLevel(int mainPowerLevel);
-
-    int getSecondaryPowerLevel();
-    void setSecondaryPowerLevel(int secondaryPowerLevel);
-
     Double getScaleMultiplier();
     void setScaleMultiplier(Double scaleMultiplier);
+
+    Vec3d getUsagePosition();
+    void clearUsagePosition();
+    void setUsagePosition(Vec3d pos);
 
     Vec3d getTeleportTarget();
     void clearTeleportTarget();
@@ -29,6 +21,12 @@ public interface PlayerTraits extends Component {
 
     Float getStamina();
     void setStamina(Float stamina);
+
+    Integer getPersonalDimensionValue();
+    void setPersonalDimensionValue(Integer value);
+
+    Boolean getPersonalDimensionGenerated();
+    void setPersonalDimensionGenerated(Boolean Generated);
 
     Boolean getActPower_main();
     void setActPower_main(Boolean actPower_main);
@@ -51,56 +49,21 @@ public interface PlayerTraits extends Component {
         private double scaleMultiplier = 1;
 
         private Vec3d teleportTarget;
+        private Vec3d usagePosition;
 
+        private boolean Generated;
         private boolean actPower_main;
         private boolean actPower_secondary;
 
         private Float stamina;
 
+        private int value;
+
+
         private String movement;
         private String main;
         private String intelligence;
 
-
-        @Override
-        public int getMainPowerExperience() {
-            return 0;
-        }
-
-        @Override
-        public void setMainPowerExperience(int mainPowerExperience) {
-
-        }
-
-        @Override
-        public int getSecondaryPowerExperience() {
-            return 0;
-        }
-
-        @Override
-        public void setSecondaryPowerExperience(int secondaryPowerExperience) {
-
-        }
-
-        @Override
-        public int getMainPowerLevel() {
-            return 0;
-        }
-
-        @Override
-        public void setMainPowerLevel(int mainPowerLevel) {
-
-        }
-
-        @Override
-        public int getSecondaryPowerLevel() {
-            return 0;
-        }
-
-        @Override
-        public void setSecondaryPowerLevel(int secondaryPowerLevel) {
-
-        }
 
         @Override
         public Double getScaleMultiplier() {
@@ -125,6 +88,19 @@ public interface PlayerTraits extends Component {
         public void clearTeleportTarget() {
             this.teleportTarget = null;
         }
+        @Override
+        public Vec3d getUsagePosition() {
+            return this.usagePosition;
+        }
+
+        @Override
+        public void setUsagePosition(Vec3d pos) {
+            this.usagePosition = pos;
+        }
+
+        public void clearUsagePosition() {
+            this.usagePosition = null;
+        }
 
         @Override
         public Float getStamina() {
@@ -134,6 +110,26 @@ public interface PlayerTraits extends Component {
         @Override
         public void setStamina(Float stamina) {
             this.stamina = stamina;
+        }
+
+        @Override
+        public Integer getPersonalDimensionValue() {
+            return value;
+        }
+
+        @Override
+        public void setPersonalDimensionValue(Integer value) {
+            this.value = value;
+        }
+
+        @Override
+        public Boolean getPersonalDimensionGenerated() {
+            return Generated;
+        }
+
+        @Override
+        public void setPersonalDimensionGenerated(Boolean Generated) {
+            this.Generated = Generated;
         }
 
         @Override
@@ -196,11 +192,20 @@ public interface PlayerTraits extends Component {
             writeView.putString("main",main);
             writeView.putString("intelligence",intelligence);
 
+            writeView.putBoolean("Generated",Generated);
             writeView.putBoolean("actPower_main",actPower_main);
             writeView.putBoolean("actPower_secondary",actPower_secondary);
 
             writeView.putFloat("stamina",stamina);
 
+            writeView.putInt("value",value);
+
+
+            if (usagePosition != null) {
+                writeView.putDouble("usagePosX", usagePosition.x);
+                writeView.putDouble("usagePosY", usagePosition.y);
+                writeView.putDouble("usagePosZ", usagePosition.z);
+            }
         }
 
         @Override
@@ -208,12 +213,22 @@ public interface PlayerTraits extends Component {
             this.movement = readView.getString("movement", movement);
             this.main = readView.getString("main", main);
             this.intelligence = readView.getString("intelligence", intelligence);
+            this.Generated = readView.getBoolean("Generated", Generated);
+            this.value = readView.getInt("value", value);
             this.actPower_main = readView.getBoolean("actPower_main", actPower_main);
             this.actPower_secondary = readView.getBoolean("actPower_secondary", actPower_secondary);
             if (readView.contains("stamina")) {
                 this.stamina = readView.getFloat("stamina", 100f);
             } else if (this.stamina == null) {
                 this.stamina = 100f;
+            }
+            if (readView.contains("usagePosX")) {
+                double x = readView.getDouble("usagePosX", 0);
+                double y = readView.getDouble("usagePosY", 0);
+                double z = readView.getDouble("usagePosZ", 0);
+                this.usagePosition = new Vec3d(x, y, z);
+            } else {
+                this.usagePosition = null;
             }
         }
 
