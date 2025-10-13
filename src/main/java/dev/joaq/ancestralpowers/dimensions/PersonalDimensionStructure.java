@@ -23,6 +23,7 @@ public class PersonalDimensionStructure {
     private static final int SPAWN_Y = 64;
     private static final Identifier STRUCTURE_ID = Identifier.of("ancestralpowers", "personal_dimension_structure");
 
+    // Geração da estrutura
     public static void generate(ServerWorld world, int i, int k) {
         StructureTemplateManager manager = world.getStructureTemplateManager();
         Optional<StructureTemplate> optional = manager.getTemplate(STRUCTURE_ID);
@@ -35,62 +36,45 @@ public class PersonalDimensionStructure {
         StructureTemplate template = optional.get();
         BlockPos pos = new BlockPos(i, SPAWN_Y, k);
         template.place(world, pos, pos, new StructurePlacementData(), world.getRandom(), 2);
-
-        System.out.println("[AncestralPowers] Estrutura 'personal_spawn' gerada na dimensão pessoal.");
     }
 
-    public static void teleportToPersonalDimension(ServerPlayerEntity player) {
+    // Teleporta player e optional target para a dimensão pessoal
+    public static void teleportToPersonalDimension(ServerPlayerEntity player, ServerPlayerEntity target) {
         MinecraftServer server = player.getServer();
         if (server == null) return;
 
-        PlayerTraits traits = MyComponents.TRAITS.get(player);
-        EnumSet<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
-
+        PlayerTraits playerTraits = MyComponents.TRAITS.get(player);
         ServerWorld personalWorld = server.getWorld(ModDimensions.PERSONAL_WORLD_KEY);
+
         if (personalWorld == null) {
-            player.sendMessage(net.minecraft.text.Text.of("§cDimensão pessoal não encontrada!"), false);
+            player.sendMessage(Text.literal("§cDimensão pessoal não encontrada!"), false);
             return;
         }
 
-        // Se o jogador já estiver na dimensão pessoal, volta para a posição original
+        // Se já está na dimensão pessoal, retorna
         if (player.getWorld() == personalWorld) {
-            Vec3d returnPos = traits.getUsagePosition();
-
-            if (returnPos != null) {
-                ServerWorld overworld = server.getOverworld();
-                player.teleport(overworld,
-                        returnPos.x,
-                        returnPos.y,
-                        returnPos.z,
-                        flags,
-                        player.getYaw(),
-                        player.getPitch(),
-                        false);
-                traits.clearUsagePosition(); // limpa após usar
-            } else {
-                player.sendMessage(net.minecraft.text.Text.of("§ePosição de origem não encontrada, retornando ao spawn."), false);
-                ServerWorld overworld = server.getOverworld();
-                player.teleport(overworld,
-                        overworld.getSpawnPos().getX(),
-                        overworld.getSpawnPos().getY(),
-                        overworld.getSpawnPos().getZ(),
-                        flags,
-                        player.getYaw(),
-                        player.getPitch(),
-                        false);
+            teleportBack(player, playerTraits);
+            if (target != null) {
+                PlayerTraits targetTraits = MyComponents.TRAITS.get(target);
+                teleportBack(target, targetTraits);
             }
             return;
         }
 
-        // Salva a posição de onde ele ativou
-        Vec3d currentPos = getUsagePosition(player);
-        traits.setUsagePosition(currentPos);
+        // Salva posições de origem
+        Vec3d playerOrigin = player.getPos();
+        playerTraits.setUsagePosition(playerOrigin);
 
-        if(!traits.getPersonalDimensionGenerated()) {
+        if (target != null) {
+            PlayerTraits targetTraits = MyComponents.TRAITS.get(target);
+            targetTraits.setUsagePosition(target.getPos());
+        }
 
+        // Geração da dimensão pessoal
+        if (!playerTraits.getPersonalDimensionGenerated()) {
             PersonalDimensionCounter globalCounter = PersonalDimensionCounter.getServerState(server);
             int nextValue = globalCounter.incrementAndGet();
-            traits.setPersonalDimensionValue(nextValue);
+            playerTraits.setPersonalDimensionValue(nextValue);
 
             int offset = nextValue * 500;
             BlockPos checkPos = new BlockPos(offset, SPAWN_Y, offset);
@@ -98,24 +82,46 @@ public class PersonalDimensionStructure {
                 generate(personalWorld, offset, offset);
             }
 
-            traits.setPersonalDimensionGenerated(true);
-            player.sendMessage(Text.literal("Tu e o numero: "+ traits.getPersonalDimensionValue()));
+            playerTraits.setPersonalDimensionGenerated(true);
+            player.sendMessage(Text.literal("Número da dimensão pessoal: " + playerTraits.getPersonalDimensionValue()));
         }
 
-        int value = traits.getPersonalDimensionValue() * 500;
-        player.teleport(personalWorld,
-                23.5+value, 89, 23.5+value,  // posição inicial dentro da dimensão
-                flags,
+        int value = playerTraits.getPersonalDimensionValue() * 500;
+        Vec3d teleportPos = new Vec3d(23.5 + value, 89, 23.5 + value);
+        EnumSet<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
+
+        // Teleporta player
+        player.teleport(personalWorld, teleportPos.x, teleportPos.y, teleportPos.z, flags, player.getYaw(), player.getPitch(), false);
+
+        // Teleporta target
+        if (target != null) {
+            target.teleport(personalWorld, teleportPos.x, teleportPos.y, teleportPos.z, flags, player.getYaw(), player.getPitch(), false);
+        }
+
+        player.sendMessage(Text.literal("§aVocê foi teleportado para sua dimensão pessoal."), false);
+        if (target != null) {
+            player.sendMessage(Text.literal("§a" + target.getName().getString() + " também foi teleportado junto."), false);
+        }
+    }
+
+    // Teleporta de volta para a posição de origem
+    private static void teleportBack(ServerPlayerEntity player, PlayerTraits traits) {
+        Vec3d returnPos = traits.getUsagePosition();
+        if (returnPos == null) {
+            ServerWorld overworld = player.getServer().getOverworld();
+            returnPos = new Vec3d(overworld.getSpawnPos().getX(), overworld.getSpawnPos().getY(), overworld.getSpawnPos().getZ());
+        }
+
+        player.teleport(player.getServer().getOverworld(),
+                returnPos.x,
+                returnPos.y,
+                returnPos.z,
+                EnumSet.noneOf(PositionFlag.class),
                 player.getYaw(),
                 player.getPitch(),
                 false);
 
-        player.sendMessage(net.minecraft.text.Text.of("§aVocê foi transportado para sua dimensão pessoal."), false);
-    }
-
-    private static Vec3d getUsagePosition(ServerPlayerEntity player) {
-        Vec3d playerPos = player.getPos();
-        BlockPos ground = new BlockPos((int) playerPos.x, (int) playerPos.y, (int) playerPos.z);
-        return new Vec3d(ground.getX(), ground.getY(), ground.getZ());
+        traits.clearUsagePosition();
+        player.sendMessage(Text.literal("§aVocê retornou para sua posição original."), false);
     }
 }

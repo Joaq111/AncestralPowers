@@ -5,7 +5,7 @@ import java.util.Random;
 public class RandomUtils {
     private static final Random rand = new Random();
 
-    private static final String[] mains = {"Super Força", "Imortalidade", "Fireball", "SuperTeleporte", "Scale", "SuperSpeed", "Suppressor"};
+    private static final String[] mains = {"Super Força", "Imortalidade", "Fireball", "SuperTeleporteMain", "Scale", "SuperSpeed", "Suppressor"};
     private static final String[] movements = {"Voo", "Teleporte", "Velocidade", "PersonalDimension"};
     private static final String[] intelligences = {"Burro", "Inteligente", "Gênio"};
 
@@ -15,8 +15,8 @@ public class RandomUtils {
 
     // Recebe a trait principal para decidir o movimento
     public static String randomMovement(String mainTrait) {
-        if ("SuperTeleporte".equals(mainTrait)) {
-            return "SuperTeleporte";
+        if ("SuperTeleporteMain".equals(mainTrait)) {
+            return "SuperTeleporteSecondary";
         }
         if ("SuperSpeed".equals(mainTrait)) {
             return "SuperSpeed";

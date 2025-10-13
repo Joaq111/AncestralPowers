@@ -53,7 +53,7 @@ public class ModCommands {
                                     return 0;
                                 }
 
-                                PersonalDimensionStructure.teleportToPersonalDimension(player);
+                                PersonalDimensionStructure.teleportToPersonalDimension(player, null);
                                 player.sendMessage(Text.of("Teleportado para sua dimensão pessoal."), false);
                                 return 1;
                             })

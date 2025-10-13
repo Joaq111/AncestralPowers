@@ -106,7 +106,7 @@ public abstract class PowerBase implements Power {
 
 
         switch (activateType) {
-            case "SUPER TELEPORT" -> {
+            case "TELEPORT" -> {
                 if (!traits.getActPower_secondary()) {
                     traits.setActPower_main(false);
                     return;

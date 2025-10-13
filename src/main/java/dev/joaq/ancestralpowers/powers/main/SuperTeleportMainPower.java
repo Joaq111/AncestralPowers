@@ -17,7 +17,7 @@ public class SuperTeleportMainPower extends PowerBase {
 
     @Override
     protected String ActivationType() {
-        return "SUPER TELEPORT";
+        return "PRESS";
     }
 
     @Override
@@ -28,7 +28,11 @@ public class SuperTeleportMainPower extends PowerBase {
     @Override
     protected void executeLogic(ServerPlayerEntity player, boolean activate, float stamina) {
         PlayerTraits traits = MyComponents.TRAITS.get(player);
-
+        if (!traits.getActPower_secondary()) {
+            traits.setActPower_main(false);
+            traits.setStamina(traits.getStamina()+15);
+            return;
+        }
         Vec3d targetPos = traits.getTeleportTarget();
         if (targetPos == null) {
             player.sendMessage(Text.literal("⚠ Defina um alvo com o poder secundário antes de teleportar!"), false);

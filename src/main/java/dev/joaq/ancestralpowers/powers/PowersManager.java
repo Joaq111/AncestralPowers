@@ -11,8 +11,8 @@ public class PowersManager {
 
     private static Power getPower(String power) {
         return switch (power) {
+            case "SuperTeleporteMain" -> new SuperTeleportMainPower();
             case "Super Força" -> new StrengthPower();
-            case "SuperTeleporte" -> new SuperTeleportMainPower();
             case "Suppressor" -> new SuppressionPower();
             case "SuperSpeed" -> new SuperSpeedPower();
             case "Scale" -> new IncreaseScalePower();
@@ -23,7 +23,7 @@ public class PowersManager {
     }
     private static Power getPowerSecondary(String power) {
         return switch (power) {
-            case "SuperTeleporte" -> new SuperTeleportSecondaryPower();
+            case "SuperTeleporteSecondary" -> new SuperTeleportSecondaryPower();
             case "Scale" -> new DecreaseScalePower();
             case "SuperSpeed" -> new SuperSpeedPowerDecrease();
             case "Voo" -> new FlyPower();
