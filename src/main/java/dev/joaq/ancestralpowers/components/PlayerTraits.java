@@ -6,7 +6,12 @@ import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.Vec3d;
 import org.ladysnake.cca.api.v3.component.Component;
 
+import java.util.UUID;
+
 public interface PlayerTraits extends Component {
+
+    UUID getArenaTarget();
+    void setArenaTarget(UUID arenaTarget);
 
     Double getScaleMultiplier();
     void setScaleMultiplier(Double scaleMultiplier);
@@ -27,6 +32,15 @@ public interface PlayerTraits extends Component {
 
     Boolean getPersonalDimensionGenerated();
     void setPersonalDimensionGenerated(Boolean Generated);
+
+    Boolean getInArena();
+    void setInArena(Boolean inArena);
+
+    Integer getArenaValue();
+    void setArenaValue(Integer value2);
+
+    Boolean getArenaGenerated();
+    void setArenaGenerated(Boolean Generated2);
 
     Boolean getActPower_main();
     void setActPower_main(Boolean actPower_main);
@@ -51,19 +65,35 @@ public interface PlayerTraits extends Component {
         private Vec3d teleportTarget;
         private Vec3d usagePosition;
 
+        private boolean inArena;
         private boolean Generated;
+        private boolean Generated2;
         private boolean actPower_main;
         private boolean actPower_secondary;
 
         private Float stamina;
 
         private int value;
+        private int value2;
+
+        private UUID arenaTarget;
+
 
 
         private String movement;
         private String main;
         private String intelligence;
 
+
+        @Override
+        public UUID getArenaTarget() {
+            return this.arenaTarget;
+        }
+
+        @Override
+        public void setArenaTarget(UUID arenaTarget) {
+            this.arenaTarget = arenaTarget;
+        }
 
         @Override
         public Double getScaleMultiplier() {
@@ -133,6 +163,36 @@ public interface PlayerTraits extends Component {
         }
 
         @Override
+        public Boolean getInArena() {
+            return inArena;
+        }
+
+        @Override
+        public void setInArena(Boolean inArena) {
+        this.inArena = inArena;
+        }
+
+        @Override
+        public Integer getArenaValue() {
+            return value2;
+        }
+
+        @Override
+        public void setArenaValue(Integer value2) {
+            this.value2 = value2;
+        }
+
+        @Override
+        public Boolean getArenaGenerated() {
+            return Generated2;
+        }
+
+        @Override
+        public void setArenaGenerated(Boolean Generated2) {
+            this.Generated2 = Generated2;
+        }
+
+        @Override
         public Boolean getActPower_main() {
             return actPower_main;
 
@@ -193,18 +253,23 @@ public interface PlayerTraits extends Component {
             writeView.putString("intelligence",intelligence);
 
             writeView.putBoolean("Generated",Generated);
+            writeView.putBoolean("Generated2",Generated2);
+
             writeView.putBoolean("actPower_main",actPower_main);
             writeView.putBoolean("actPower_secondary",actPower_secondary);
 
             writeView.putFloat("stamina",stamina);
 
             writeView.putInt("value",value);
-
+            writeView.putInt("value2",value2);
 
             if (usagePosition != null) {
                 writeView.putDouble("usagePosX", usagePosition.x);
                 writeView.putDouble("usagePosY", usagePosition.y);
                 writeView.putDouble("usagePosZ", usagePosition.z);
+            }
+            if (arenaTarget != null) {
+                writeView.putString("arenaTarget",arenaTarget.toString());
             }
         }
 
@@ -215,6 +280,10 @@ public interface PlayerTraits extends Component {
             this.intelligence = readView.getString("intelligence", intelligence);
             this.Generated = readView.getBoolean("Generated", Generated);
             this.value = readView.getInt("value", value);
+
+            this.Generated2 = readView.getBoolean("Generated2", Generated2);
+            this.value2 = readView.getInt("value2", value2);
+
             this.actPower_main = readView.getBoolean("actPower_main", actPower_main);
             this.actPower_secondary = readView.getBoolean("actPower_secondary", actPower_secondary);
             if (readView.contains("stamina")) {
@@ -229,6 +298,16 @@ public interface PlayerTraits extends Component {
                 this.usagePosition = new Vec3d(x, y, z);
             } else {
                 this.usagePosition = null;
+            }
+            if (readView.contains("arenaTarget")) {
+                String uuidStr = readView.getString("arenaTarget", "");
+                if (!uuidStr.isEmpty()) {
+                    this.arenaTarget = UUID.fromString(uuidStr);
+                } else {
+                    this.arenaTarget = null;
+                }
+            } else {
+                this.arenaTarget = null;
             }
         }
 
