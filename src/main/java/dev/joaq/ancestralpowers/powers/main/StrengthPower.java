@@ -44,7 +44,7 @@ public class StrengthPower extends PowerBase {
         removeModifier(attackDamageAttr, ATTACK_DAMAGE_ID);
 
 
-        addModifier(attackDamageAttr, ATTACK_DAMAGE_ID, 1000);
+        addModifier(attackDamageAttr, ATTACK_DAMAGE_ID, 3);
 
     }
 

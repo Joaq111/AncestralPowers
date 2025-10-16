@@ -14,7 +14,7 @@ public class DimensionalArenaPower extends PowerBase {
 
     @Override
     protected float staminaCost() {
-        return 0.25f;
+        return 0.5f;
     }
 
     @Override

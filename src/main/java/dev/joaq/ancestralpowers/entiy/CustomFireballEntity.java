@@ -61,7 +61,7 @@ public class CustomFireballEntity extends FireballEntity {
                     this.createFire,
                     this.breakBlocks ? World.ExplosionSourceType.MOB : World.ExplosionSourceType.NONE
             );
-            this.discard(); // remove a bola
+            this.discard();
         }
     }
 }

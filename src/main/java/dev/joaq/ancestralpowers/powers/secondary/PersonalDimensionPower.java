@@ -18,7 +18,7 @@ public class PersonalDimensionPower extends PowerBase {
 
     @Override
     protected float staminaCost() {
-        return 80;
+        return 60;
     }
 
     @Override
@@ -28,7 +28,6 @@ public class PersonalDimensionPower extends PowerBase {
 
     @Override
     protected void disablePowerSpecific(ServerPlayerEntity player) {
-        // Sem lógica específica para desativar
     }
 
     @Override
