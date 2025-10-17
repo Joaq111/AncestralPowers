@@ -30,7 +30,7 @@ public class FireballPower extends PowerBase {
 
     @Override
     protected float staminaCost() {
-        return 25;
+        return 20;
     }
 
 

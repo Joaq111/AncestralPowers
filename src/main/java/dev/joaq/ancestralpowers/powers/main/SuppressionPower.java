@@ -19,7 +19,7 @@ public class SuppressionPower extends PowerBase {
 
     @Override
     protected float staminaCost() {
-        return 0.5f;
+        return 1f;
     }
 
     @Override

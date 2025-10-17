@@ -18,7 +18,7 @@ public class TeleportPower extends PowerBase {
 
     @Override
     protected float staminaCost() {
-        return 25;
+        return 20;
     }
 
     @Override

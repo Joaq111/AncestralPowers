@@ -20,8 +20,8 @@ public class CustomFireballEntity extends FireballEntity {
 
     private float explosionPower = 2.0f;
     private float damageAmount = 6.0f;
-    private boolean breakBlocks = true;
-    private boolean createFire = true;
+    private boolean breakBlocks = false;
+    private boolean createFire = false;
 
     public CustomFireballEntity(EntityType<? extends CustomFireballEntity> type, World world) {
         super(type, world);
